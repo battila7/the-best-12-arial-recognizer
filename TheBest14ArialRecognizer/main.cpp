@@ -8,9 +8,9 @@ int main(int argc, char **argv)
 {
 	CLI::App app{"The Best Size 14 Arial Text Recognizer"};
 
-	app.require_subcommand();
-
 	arialrec::command::addRecognizeSubcommand(app);
+
+	app.require_subcommand();
 
 	CLI11_PARSE(app, argc, argv);
 

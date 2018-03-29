@@ -10,12 +10,12 @@ namespace command
 
 static struct Arguments
 {
-	std::string inputFilePath;
+	std::string inputImagePath;
 };
 
 static void runSubcommand(const Arguments &args)
 {
-	std::cout << args.inputFilePath << std::endl;
+	std::cout << args.inputImagePath << std::endl;
 }
 
 void addRecognizeSubcommand(CLI::App &app)
@@ -24,13 +24,10 @@ void addRecognizeSubcommand(CLI::App &app)
 
 	std::shared_ptr<Arguments> args = std::make_shared<Arguments>();
 
-	std::string inputImagePath;
+	recognize->add_option("-f", args->inputImagePath, "The image file that contains the text to recognize")
+		->required();
 
-	recognize->add_option("-f", inputImagePath, "The image file that contains the text to recognize")
-		->required()
-		->check(CLI::ExistingFile);
-
-	recognize->set_callback([&args]() { runSubcommand(*args); });
+	recognize->set_callback([args]() { runSubcommand(*args); });
 }
 
 } // namespace command
