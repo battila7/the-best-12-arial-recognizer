@@ -12,7 +12,7 @@ using brightness_t = unsigned char;
 enum class ComponentCount
 {
 	SINGLE = 1,
-	THREE
+	THREE = 3
 };
 
 struct Image

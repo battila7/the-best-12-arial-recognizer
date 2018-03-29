@@ -30,6 +30,9 @@
     <ClCompile Include="recognize-subcommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="preprocessing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\stdafx.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\recognize_subcommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\preprocessing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
