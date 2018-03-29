@@ -2,8 +2,9 @@
 #define STDAFX_H
 
 #include <cstdlib>
-#include <string>
 #include <memory>
+#include <random>
+#include <string>
 
 #define STBI_MSC_SECURE_CRT
 #define STB_IMAGE_IMPLEMENTATION

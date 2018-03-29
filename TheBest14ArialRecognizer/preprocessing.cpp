@@ -50,6 +50,26 @@ void toBinary(image::Image &img, const image::brightness_t threshold)
 	}
 }
 
+void withAdditiveBinaryNoise(image::Image &img, const int percentage)
+{
+	if (img.componentCount != image::ComponentCount::SINGLE)
+	{
+		return;
+	}
+
+	std::random_device randomDevice;
+	std::mt19937 generator(randomDevice());
+	std::uniform_int_distribution<> distribution(0, 99);
+
+	for (int i = 0; i < img.physicalSize(); ++i)
+	{
+		if (distribution(generator) < percentage)
+		{
+			img.data[i] = img.data[i] == MIN_RGB_VALUE ? MAX_RGB_VALUE : MIN_RGB_VALUE;
+		}
+	}
+}
+
 } // namespace preprocessing
 
 } // namespace arielrec
