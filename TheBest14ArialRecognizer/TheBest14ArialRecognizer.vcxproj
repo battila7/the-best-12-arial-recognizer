@@ -146,6 +146,7 @@
     <ClCompile Include="image.cpp" />
     <ClCompile Include="preprocessing.cpp" />
     <ClCompile Include="recognize-subcommand.cpp" />
+    <ClCompile Include="segmentation.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -154,6 +155,7 @@
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\preprocessing.h" />
     <ClInclude Include="include\recognize_subcommand.h" />
+    <ClInclude Include="include\segmentation.h" />
     <ClInclude Include="include\stbi\stb_image.h" />
     <ClInclude Include="include\stbi\stb_image_resize.h" />
     <ClInclude Include="include\stbi\stb_image_write.h" />

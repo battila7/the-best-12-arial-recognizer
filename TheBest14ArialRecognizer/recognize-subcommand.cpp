@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "image.h"
 #include "preprocessing.h"
+#include "segmentation.h"
 
 #include "recognize_subcommand.h"
 
@@ -31,6 +32,8 @@ static void runSubcommand(const Arguments &args)
 	{
 		preprocessing::withAdditiveBinaryNoise(img, args.noise);
 	}
+
+	auto characterBoxes = segmentation::identifyCharacterBoxes(img, 0, 200);
 }
 
 void addRecognizeSubcommand(CLI::App &app)

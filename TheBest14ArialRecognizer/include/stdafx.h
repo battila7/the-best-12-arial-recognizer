@@ -5,6 +5,7 @@
 #include <memory>
 #include <random>
 #include <string>
+#include <vector>
 
 #define STBI_MSC_SECURE_CRT
 #define STB_IMAGE_IMPLEMENTATION
