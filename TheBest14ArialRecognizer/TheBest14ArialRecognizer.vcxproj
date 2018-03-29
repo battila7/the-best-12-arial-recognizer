@@ -144,12 +144,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="image.cpp" />
+    <ClCompile Include="recognize-subcommand.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CLI11\CLI11.hpp" />
     <ClInclude Include="include\image.h" />
+    <ClInclude Include="include\recognize_subcommand.h" />
     <ClInclude Include="include\stbi\stb_image.h" />
     <ClInclude Include="include\stbi\stb_image_resize.h" />
     <ClInclude Include="include\stbi\stb_image_write.h" />
