@@ -1,6 +1,8 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+#include "feature/types.h"
+
 namespace arialrec
 {
 
@@ -15,7 +17,7 @@ namespace feature
 namespace position
 {
 
-int verticalPositionInLine(const segmentation::CharacterBox &charBox);
+feature_t verticalPositionInLine(const segmentation::CharacterBox &charBox);
 
 } // namespace position
 

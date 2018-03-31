@@ -1,6 +1,7 @@
 #ifndef WALSH_H
 #define WALSH_H
 
+#include "feature/types.h"
 #include "image.h"
 
 namespace arialrec
@@ -17,7 +18,7 @@ namespace feature
 namespace walsh
 {
 
-std::vector<int> computeWalshValues(const image::GrayscaleImage &img, const segmentation::CharacterBox &charBox);
+FeatureVector computeWalshValues(const image::GrayscaleImage &img, const segmentation::CharacterBox &charBox);
 
 } // namespace walsh
 

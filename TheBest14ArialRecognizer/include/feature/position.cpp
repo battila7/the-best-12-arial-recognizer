@@ -13,14 +13,14 @@ namespace feature
 namespace position
 {
 
-enum VerticalPosition : int
+enum VerticalPosition : feature_t
 {
 	WHOLE = 0,
 	UPPER_HALF = 1000,
 	LOWER_HALF = 2000
 };
 
-int verticalPositionInLine(const segmentation::Line &line, const segmentation::CharacterBox &charBox)
+feature_t verticalPositionInLine(const segmentation::Line &line, const segmentation::CharacterBox &charBox)
 {
 	const size_t halfRow = (line.bottomRight.row + line.topLeft.row) / 2;
 

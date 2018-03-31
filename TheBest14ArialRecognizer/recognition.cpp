@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+#include "feature/area.h"
+#include "feature/position.h"
+#include "feature/walsh.h"
 #include "segmentation.h"
 
 #include "recognition.h"
@@ -10,24 +13,26 @@ namespace arialrec
 namespace recognition
 {
 
-FeatureMap readFeatureMap(const char *path)
+feature::FeatureMap readFeatureMap(const char *path)
 {
 	return {};
 }
 
-void writeFeatureMap(const char *path, const FeatureMap &featureMap)
+void writeFeatureMap(const char *path, const feature::FeatureMap &featureMap)
 {
 
 }
 
-FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::CharacterBox charBox)
+feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::CharacterBox charBox)
 {
-	FeatureVector featureVector;
+	feature::FeatureVector featureVector;
+
+
 
 	return featureVector;
 }
 
-std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const FeatureMap &featureMap)
+std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const feature::FeatureMap &featureMap)
 {
 	std::stringstream text;
 

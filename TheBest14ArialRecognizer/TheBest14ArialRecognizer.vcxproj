@@ -160,6 +160,7 @@
     <ClInclude Include="include\CLI11\CLI11.hpp" />
     <ClInclude Include="include\feature\area.h" />
     <ClInclude Include="include\feature\position.h" />
+    <ClInclude Include="include\feature\types.h" />
     <ClInclude Include="include\feature\walsh.h" />
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\preprocessing.h" />

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "feature/types.h"
+
 #include "image.h"
 
 namespace arialrec
@@ -17,18 +19,11 @@ struct Line;
 namespace recognition
 {
 
-using feature_t = int;
+feature::FeatureMap readFeatureMap(const char *path);
 
-using FeatureVector = std::vector<feature_t>;
+void writeFeatureMap(const char *path, const feature::FeatureMap &featureMap);
 
-using FeatureMap = std::map<char, FeatureVector>;
-
-
-FeatureMap readFeatureMap(const char *path);
-
-void writeFeatureMap(const char *path, const FeatureMap &featureMap);
-
-std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const FeatureMap &featureMap);
+std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const feature::FeatureMap &featureMap);
 
 } // namespace recognition
 

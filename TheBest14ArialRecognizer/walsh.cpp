@@ -62,9 +62,9 @@ static WalshImage xor(const WalshImage &lhs, const WalshImage &rhs)
 	return xord;
 }
 
-static size_t countMatches(const image::GrayscaleImage &target, const WalshImage &probe)
+static feature_t countMatches(const image::GrayscaleImage &target, const WalshImage &probe)
 {
-	size_t sum = 0;
+	feature_t sum = 0;
 
 	for (size_t i = 0; i < target.physicalSize(); ++i)
 	{
@@ -112,11 +112,11 @@ static std::vector<WalshImage> computeWalshMatrix()
 	return images;
 }
 
-std::vector<int> computeWalshValues(const image::GrayscaleImage &img, const segmentation::CharacterBox &charBox)
+FeatureVector computeWalshValues(const image::GrayscaleImage &img, const segmentation::CharacterBox &charBox)
 {
 	static std::vector<WalshImage> matrix = computeWalshMatrix();
 
-	std::vector<int> result;
+	FeatureVector result;
 
 	auto charImg = image::copyRect(img, charBox.topLeft, charBox.bottomRight);
 

@@ -1,6 +1,8 @@
 #ifndef AREA_H
 #define AREA_H
 
+#include "feature/types.h"
+
 namespace arialrec
 {
 
@@ -15,7 +17,7 @@ namespace feature
 namespace area
 {
 
-int compute(const segmentation::CharacterBox &charBox);
+feature_t compute(const segmentation::CharacterBox &charBox);
 
 } // namespace area
 

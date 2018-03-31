@@ -13,11 +13,11 @@ namespace feature
 namespace area
 {
 
-int compute(const segmentation::CharacterBox &charBox)
+feature_t compute(const segmentation::CharacterBox &charBox)
 {
 	const int truncatedArea = (int)charBox.area() / 10;
 
-	return (int)std::exp(truncatedArea);
+	return (feature_t)std::exp(truncatedArea);
 }
 
 } // namespace area
