@@ -2,6 +2,7 @@
 #define STDAFX_H
 
 #include <algorithm>
+#include <array>
 #include <cstdlib>
 #include <memory>
 #include <optional>

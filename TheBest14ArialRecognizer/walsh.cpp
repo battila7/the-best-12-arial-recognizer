@@ -1,10 +1,8 @@
-#ifndef WALSH_H
-#define WALSH_H
-
-#include <array>
-#include <algorithm>
+#include "stdafx.h"
 
 #include "image.h"
+
+#include "walsh.h"
 
 namespace arialrec
 {
@@ -12,8 +10,8 @@ namespace arialrec
 namespace walsh
 {
 
-constexpr size_t MATRIX_DIMENSION = 8;
-constexpr size_t IMAGE_DIMENSION = 64;
+static constexpr size_t MATRIX_DIMENSION = 8;
+static constexpr size_t IMAGE_DIMENSION = 64;
 
 using WalshImage = std::array<image::brightness_t, IMAGE_DIMENSION * IMAGE_DIMENSION>;
 
@@ -23,7 +21,7 @@ enum FillDirection
 	COLUMN
 };
 
-WalshImage createBorderWalsh(std::array<char, 8> values, FillDirection direction)
+static WalshImage createBorderWalsh(std::array<char, 8> values, FillDirection direction)
 {
 	WalshImage img;
 
@@ -47,7 +45,7 @@ WalshImage createBorderWalsh(std::array<char, 8> values, FillDirection direction
 	return img;
 }
 
-WalshImage xorWalsh(const WalshImage &lhs, const WalshImage &rhs)
+static WalshImage xor(const WalshImage &lhs, const WalshImage &rhs)
 {
 	WalshImage xord;
 
@@ -59,7 +57,7 @@ WalshImage xorWalsh(const WalshImage &lhs, const WalshImage &rhs)
 	return xord;
 }
 
-size_t andCount(const image::GrayscaleImage &target, const WalshImage &probe)
+static size_t countMatches(const image::GrayscaleImage &target, const WalshImage &probe)
 {
 	size_t sum = 0;
 
@@ -74,7 +72,7 @@ size_t andCount(const image::GrayscaleImage &target, const WalshImage &probe)
 	return sum;
 }
 
-std::vector<WalshImage> computeWalshMatrix()
+static std::vector<WalshImage> computeWalshMatrix()
 {
 	std::vector<WalshImage> images = {
 		createBorderWalsh({ 0, 0, 0, 0, 0, 0, 0, 0 }, ROW),
@@ -102,14 +100,14 @@ std::vector<WalshImage> computeWalshMatrix()
 			const size_t rowImageIndex = row - 1;
 			const size_t columnImageIndex = 7 + column;
 
-			images.push_back(xorWalsh(images[row - 1], images[columnImageIndex]));
+			images.push_back(xor(images[row - 1], images[columnImageIndex]));
 		}
 	}
 
 	return images;
 }
 
-std::vector<int> andWithWalshMatrix(const image::GrayscaleImage &img)
+std::vector<int> computeWalshValues(const image::GrayscaleImage &img)
 {
 	static std::vector<WalshImage> matrix = computeWalshMatrix();
 
@@ -117,7 +115,7 @@ std::vector<int> andWithWalshMatrix(const image::GrayscaleImage &img)
 
 	std::transform(matrix.begin(), matrix.end(), std::back_inserter(result), [img](const WalshImage &probe)
 	{
-		return andCount(img, probe);
+		return countMatches(img, probe);
 	});
 
 	return result;
@@ -126,5 +124,3 @@ std::vector<int> andWithWalshMatrix(const image::GrayscaleImage &img)
 } // namespace walsh
 
 } // namespace arialrec
-
-#endif // WALSH_H
