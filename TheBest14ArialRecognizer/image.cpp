@@ -13,16 +13,18 @@ namespace image
 
 bool read(const char *path, Image &img)
 {
-	int channels;
+	int channels, width, height;
 
-	img.data = stbi_load(path, &img.width, &img.height, &channels, (int)ComponentCount::THREE);
+	img.data = stbi_load(path, &width, &height, &channels, (int)ComponentCount::THREE);
 
+	img.width = width;
+	img.height = height;
 	img.componentCount = ComponentCount::THREE;
 
 	return img.data;
 }
 
-bool write(const char *path, Image &img)
+bool write(const char *path, const Image &img)
 {
 	if (img.componentCount != ComponentCount::THREE)
 	{
@@ -39,6 +41,36 @@ Image copy(const Image &other)
 	newImage.data = new brightness_t[other.physicalSize()];
 
 	memcpy(newImage.data, other.data, other.physicalSize());
+
+	return newImage;
+}
+
+Image copyRect(const Image &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight)
+{
+	Image newImage = {
+		nullptr,
+		bottomRight.column - topLeft.column,
+		bottomRight.row - topLeft.row,
+		source.componentCount
+	};
+
+	newImage.data = new brightness_t[newImage.physicalSize()];
+
+	brightness_t *copyPointer = newImage.data;
+
+	for (size_t row = topLeft.row; row < bottomRight.row; ++row)
+	{
+		for (size_t column = topLeft.column; column < bottomRight.column; ++column)
+		{
+			const int components = (int)source.componentCount;
+
+			const brightness_t *sourcePointer = source.data + (column * components + row * components);
+
+			memcpy(copyPointer, sourcePointer, components);
+
+			copyPointer += components;
+		}
+	}
 
 	return newImage;
 }

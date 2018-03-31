@@ -28,7 +28,7 @@ struct LogicalPosition
 struct Image
 {
 	brightness_t *data;
-	int width, height;
+	size_t width, height;
 	ComponentCount componentCount;
 
 	size_t logicalSize() const
@@ -44,9 +44,11 @@ struct Image
 
 bool read(const char *path, Image &img);
 
-bool write(const char *path, Image &img);
+bool write(const char *path, const Image &img);
 
 Image copy(const Image &other);
+
+Image copyRect(const Image &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight);
 
 void expandToThreeComponents(Image &img);
 
