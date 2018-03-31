@@ -1,5 +1,5 @@
-#ifndef AREA_H
-#define AREA_H
+#ifndef POSITION_H
+#define POSITION_H
 
 namespace arialrec
 {
@@ -12,15 +12,15 @@ struct CharacterBox;
 namespace feature
 {
 
-namespace area
+namespace position
 {
 
-size_t compute(const segmentation::CharacterBox &charBox);
+int verticalPositionInLine(const segmentation::CharacterBox &charBox);
 
-} // namespace area
+} // namespace position
 
 } // namespace feature
 
 } // namespace arialrec
 
-#endif // AREA_H
+#endif // POSITION_H
