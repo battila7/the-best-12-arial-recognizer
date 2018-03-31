@@ -1,13 +1,10 @@
 #ifndef WALSH_H
 #define WALSH_H
 
+#include "image.h"
+
 namespace arialrec
 {
-
-namespace image
-{
-struct GrayscaleImage;
-} // namespace image
 
 namespace segmentation
 {

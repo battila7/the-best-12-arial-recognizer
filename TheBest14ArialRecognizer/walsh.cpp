@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "image.h"
 #include "segmentation.h"
 
 #include "feature/walsh.h"
@@ -13,6 +12,8 @@ namespace feature
 
 namespace walsh
 {
+
+using namespace arialrec;
 
 static constexpr size_t MATRIX_DIMENSION = 8;
 static constexpr size_t IMAGE_DIMENSION = 64;

@@ -145,15 +145,21 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="area.cpp" />
     <ClCompile Include="image.cpp" />
+    <ClCompile Include="include\feature\position.cpp" />
     <ClCompile Include="preprocessing.cpp" />
     <ClCompile Include="recognize-subcommand.cpp" />
     <ClCompile Include="segmentation.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="walsh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CLI11\CLI11.hpp" />
+    <ClInclude Include="include\feature\area.h" />
+    <ClInclude Include="include\feature\position.h" />
+    <ClInclude Include="include\feature\walsh.h" />
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\preprocessing.h" />
     <ClInclude Include="include\recognize_subcommand.h" />
@@ -162,7 +168,6 @@
     <ClInclude Include="include\stbi\stb_image_resize.h" />
     <ClInclude Include="include\stbi\stb_image_write.h" />
     <ClInclude Include="include\stdafx.h" />
-    <ClInclude Include="walsh.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

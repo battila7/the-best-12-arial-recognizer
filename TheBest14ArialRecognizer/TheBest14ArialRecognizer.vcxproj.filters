@@ -36,6 +36,15 @@
     <ClCompile Include="segmentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="walsh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="area.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\feature\position.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\stdafx.h">
@@ -65,7 +74,13 @@
     <ClInclude Include="include\segmentation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="walsh.h">
+    <ClInclude Include="include\feature\area.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\walsh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

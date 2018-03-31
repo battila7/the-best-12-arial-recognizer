@@ -2,7 +2,7 @@
 
 #include "segmentation.h"
 
-#include "feature/area.h";
+#include "feature/area.h"
 
 namespace arialrec
 {
@@ -13,9 +13,11 @@ namespace feature
 namespace area
 {
 
-size_t compute(const segmentation::CharacterBox &charBox)
+int compute(const segmentation::CharacterBox &charBox)
 {
-	return charBox.area();
+	const int truncatedArea = (int)charBox.area() / 10;
+
+	return (int)std::exp(truncatedArea);
 }
 
 } // namespace area

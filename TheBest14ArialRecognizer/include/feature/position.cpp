@@ -2,7 +2,7 @@
 
 #include "segmentation.h"
 
-#include "position.h";
+#include "position.h"
 
 namespace arialrec
 {

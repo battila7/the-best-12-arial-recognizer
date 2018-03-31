@@ -15,7 +15,7 @@ namespace feature
 namespace area
 {
 
-size_t compute(const segmentation::CharacterBox &charBox);
+int compute(const segmentation::CharacterBox &charBox);
 
 } // namespace area
 
