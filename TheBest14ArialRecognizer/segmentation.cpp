@@ -92,17 +92,25 @@ static std::optional<size_t> nextNonEmptyColumn(const image::Image &img, const s
 
 static std::pair<size_t, size_t> segmentBetweenRows(const image::Image &img, const size_t startingRow, const size_t endingRow, std::vector<CharacterBox> &characters)
 {
-	size_t column = 0;
+	std::optional<size_t> startingColumn;
+	size_t column = 0, endingColumn = 0;
 
 	while (column < img.width)
 	{
 		if (const auto leftColumn = nextNonEmptyColumn(img, startingRow, endingRow, column); leftColumn.has_value())
 		{
+			if (!startingColumn.has_value())
+			{
+				startingColumn = { leftColumn.value() };
+			}
+
 			if (const auto rightColumn = nextEmptyColumn(img, startingRow, endingRow, leftColumn.value()); rightColumn.has_value())
 			{
 				characters.push_back({ { leftColumn.value(), startingRow }, { rightColumn.value(), endingRow } });
 
 				column = rightColumn.value();
+
+				endingColumn = column;
 			}
 			else
 			{
@@ -114,6 +122,8 @@ static std::pair<size_t, size_t> segmentBetweenRows(const image::Image &img, con
 			break;
 		}
 	}
+
+	return { startingColumn.value_or(0), endingColumn };
 }
 
 static std::pair<Line, size_t> segmentLine(const image::Image &img, const size_t startingRow)
