@@ -2,6 +2,7 @@
 #include "image.h"
 #include "preprocessing.h"
 #include "segmentation.h"
+#include "walsh.h"
 
 #include "recognize_subcommand.h"
 
@@ -39,7 +40,7 @@ static void runSubcommand(const Arguments &args)
 
 	std::stringstream ss;
 
-	for (const auto &line : lines)
+	/*for (const auto &line : lines)
 	{
 		for (const auto character : line.characters)
 		{
@@ -55,6 +56,27 @@ static void runSubcommand(const Arguments &args)
 
 			ss.str("");
 		}
+	}*/
+
+	std::vector<walsh::WalshImage> wm = walsh::computeWalshMatrix();
+
+	for (walsh::WalshImage &wi : wm)
+	{
+		image::GrayscaleImage gi = {
+			wi.data(),
+			64,
+			64
+		};
+
+		auto grgb = image::expandToThreeComponents(gi);
+
+		ss << "out" << counter++ << ".bmp";
+
+		image::write(ss.str().c_str(), grgb);
+
+		std::cout << counter << std::endl;
+
+		ss.str("");
 	}
 }
 

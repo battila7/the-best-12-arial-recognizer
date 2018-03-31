@@ -162,6 +162,7 @@
     <ClInclude Include="include\stbi\stb_image_resize.h" />
     <ClInclude Include="include\stbi\stb_image_write.h" />
     <ClInclude Include="include\stdafx.h" />
+    <ClInclude Include="walsh.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

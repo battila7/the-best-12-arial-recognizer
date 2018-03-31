@@ -89,36 +89,34 @@ Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const 
 
 RGBImage expandToThreeComponents(GrayscaleImage &img)
 {
-	brightness_t *newData = new brightness_t[img.width * img.height * img.componentCount];
-
-	for (size_t i = 0; i < img.logicalSize(); ++i)
-	{
-		memset(newData + i * img.componentCount,
-			   img.data[i * img.componentCount],
-			   img.componentCount);
-	}
-
-	return {
-		newData,
+	RGBImage result = {
+		new brightness_t[img.width * img.height * (int)ColorSpace::RGB],
 		img.width,
 		img.height
 	};
+
+	for (size_t i = 0; i < img.physicalSize(); ++i)
+	{
+		memset(result.data + i * result.componentCount, img.data[i], result.componentCount);
+	}
+
+	return result;
 }
 
 GrayscaleImage tightenToSingleComponent(RGBImage &img)
 {
-	brightness_t *newData = new brightness_t[img.width * img.height];
-
-	for (size_t i = 0; i < img.logicalSize(); ++i)
-	{
-		newData[i] = img.data[i * (int)img.componentCount];
-	}
-
-	return {
-		newData,
+	GrayscaleImage result = {
+		new brightness_t[img.width * img.height],
 		img.width,
 		img.height
 	};
+
+	for (size_t i = 0; i < img.logicalSize(); ++i)
+	{
+		result.data[i] = img.data[i * (int)img.componentCount];
+	}
+
+	return result;
 }
 
 template Image<ColorSpace::GRAYSCALE> resize(const Image<ColorSpace::GRAYSCALE> &source, const size_t width, const size_t height);
