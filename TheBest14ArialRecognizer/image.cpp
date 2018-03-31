@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "stbi/stb_image.h"
+#include "stbi/stb_image_resize.h"
 #include "stbi/stb_image_write.h"
 
 #include "image.h"
@@ -29,6 +30,22 @@ bool write(const char *path, const RGBImage &img)
 }
 
 template <ColorSpace C>
+Image<C> resize(const Image<C> &source, const size_t width, const size_t height)
+{
+	Image<C> newImage = {
+		nullptr,
+		width,
+		height
+	};
+
+	newImage.data = new brightness_t[newImage.physicalSize()];
+
+	stbir_resize_uint8(source.data, source.width, source.height, 0, newImage.data, width, height, 0, newImage.componentCount);
+
+	return newImage;
+}
+
+template <ColorSpace C>
 Image<C> copy(const Image<C> &other)
 {
 	Image<C> newImage = other;
@@ -45,21 +62,21 @@ Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const 
 {
 	Image<C> newImage = {
 		nullptr,
-		bottomRight.column - topLeft.column,
-		bottomRight.row - topLeft.row,
+		bottomRight.column - topLeft.column + 1,
+		bottomRight.row - topLeft.row + 1
 	};
 
 	newImage.data = new brightness_t[newImage.physicalSize()];
 
 	brightness_t *copyPointer = newImage.data;
 
-	for (size_t row = topLeft.row; row < bottomRight.row; ++row)
+	for (size_t row = topLeft.row; row <= bottomRight.row; ++row)
 	{
-		for (size_t column = topLeft.column; column < bottomRight.column; ++column)
+		for (size_t column = topLeft.column; column <= bottomRight.column; ++column)
 		{
 			const int components = source.componentCount;
 
-			const brightness_t *sourcePointer = source.data + (column * components + row * components);
+			const brightness_t *sourcePointer = source.data + (row * source.width * components + column * components);
 
 			memcpy(copyPointer, sourcePointer, components);
 
@@ -88,7 +105,7 @@ RGBImage expandToThreeComponents(GrayscaleImage &img)
 	};
 }
 
- GrayscaleImage tightenToSingleComponent(RGBImage &img)
+GrayscaleImage tightenToSingleComponent(RGBImage &img)
 {
 	brightness_t *newData = new brightness_t[img.width * img.height];
 
@@ -103,6 +120,15 @@ RGBImage expandToThreeComponents(GrayscaleImage &img)
 		img.height
 	};
 }
+
+template Image<ColorSpace::GRAYSCALE> resize(const Image<ColorSpace::GRAYSCALE> &source, const size_t width, const size_t height);
+template Image<ColorSpace::RGB> resize(const Image<ColorSpace::RGB> &source, const size_t width, const size_t height);
+
+template Image<ColorSpace::GRAYSCALE> copy(const Image<ColorSpace::GRAYSCALE> &other);
+template Image<ColorSpace::RGB> copy(const Image<ColorSpace::RGB> &other);
+
+template Image<ColorSpace::GRAYSCALE> copyRect(const Image<ColorSpace::GRAYSCALE> &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight);
+template Image<ColorSpace::RGB> copyRect(const Image<ColorSpace::RGB> &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight);
 
 } // namespace image
 

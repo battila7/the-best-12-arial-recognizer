@@ -34,6 +34,28 @@ static void runSubcommand(const Arguments &args)
 	}
 
 	auto lines = segmentation::performSegmentation(grayscaleImg, 0, 2000);
+
+	int counter = 0;
+
+	std::stringstream ss;
+
+	for (const auto &line : lines)
+	{
+		for (const auto character : line.characters)
+		{
+			ss << "out" << counter++ << ".bmp";
+
+			auto characterImg = image::copyRect(rgbImg, character.topLeft, character.bottomRight);
+
+			auto resizedImg = image::resize(characterImg, 32, 32);
+
+			image::write(ss.str().c_str(), resizedImg);
+
+			std::cout << counter << std::endl;
+
+			ss.str("");
+		}
+	}
 }
 
 void addRecognizeSubcommand(CLI::App &app)

@@ -21,7 +21,7 @@ enum class ColorSpace
 template <ColorSpace C>
 struct Image
 {
-	brightness_t *data;
+	brightness_t *data = nullptr;
 	size_t width, height;
 	const int componentCount = (int)C;
 
@@ -52,6 +52,9 @@ struct LogicalPosition
 bool read(const char *path, RGBImage &img);
 
 bool write(const char *path, const RGBImage &img);
+
+template <ColorSpace C>
+Image<C> resize(const Image<C> &source, const size_t width, const size_t height);
 
 template <ColorSpace C>
 Image<C> copy(const Image<C> &other);

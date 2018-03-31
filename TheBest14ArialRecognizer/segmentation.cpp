@@ -99,11 +99,12 @@ static void cropCharacter(const image::GrayscaleImage img, CharacterBox &box)
 			if (isBlack(img.data[row * img.width + column]))
 			{
 				box.topLeft.row = row;
-				break;
+				goto searchFromTheBottom;
 			}
 		}
 	}
 
+	searchFromTheBottom:
 	for (size_t row = box.bottomRight.row; row > box.topLeft.row; --row)
 	{
 		for (size_t column = box.topLeft.column; column < box.bottomRight.column; ++column)
@@ -111,7 +112,7 @@ static void cropCharacter(const image::GrayscaleImage img, CharacterBox &box)
 			if (isBlack(img.data[row * img.width + column]))
 			{
 				box.bottomRight.row = row;
-				break;
+				return;
 			}
 		}
 	}
@@ -133,7 +134,7 @@ static std::pair<size_t, size_t> segmentBetweenRows(const image::GrayscaleImage 
 
 			if (const auto rightColumn = nextEmptyColumn(img, startingRow, endingRow, leftColumn.value()); rightColumn.has_value())
 			{
-				characters.push_back({ { leftColumn.value(), startingRow }, { rightColumn.value(), endingRow } });
+				characters.push_back({ { startingRow, leftColumn.value() }, { endingRow, rightColumn.value() - 1 } });
 
 				column = rightColumn.value();
 
@@ -163,8 +164,8 @@ static std::pair<Line, size_t> segmentLine(const image::GrayscaleImage &img, con
 	{
 		const auto [startingColumn, endingColumn] = segmentBetweenRows(img, startingRow, emptyRow.value() - 1, line.characters);
 
-		line.topLeft = { startingColumn, startingRow };
-		line.bottomRight = { endingColumn, emptyRow.value() - 1 };
+		line.topLeft = { startingRow, startingColumn };
+		line.bottomRight = { emptyRow.value() - 1, endingColumn };
 	}
 
 	return { line, emptyRow.value_or(startingRow + 1) };
