@@ -1,10 +1,14 @@
 #include "stdafx.h"
 
 #include "image.h"
+#include "segmentation.h"
 
-#include "walsh.h"
+#include "feature/walsh.h"
 
 namespace arialrec
+{
+
+namespace feature
 {
 
 namespace walsh
@@ -107,20 +111,24 @@ static std::vector<WalshImage> computeWalshMatrix()
 	return images;
 }
 
-std::vector<int> computeWalshValues(const image::GrayscaleImage &img)
+std::vector<int> computeWalshValues(const image::GrayscaleImage &img, const segmentation::CharacterBox &charBox)
 {
 	static std::vector<WalshImage> matrix = computeWalshMatrix();
 
 	std::vector<int> result;
 
-	std::transform(matrix.begin(), matrix.end(), std::back_inserter(result), [img](const WalshImage &probe)
+	auto charImg = image::copyRect(img, charBox.topLeft, charBox.bottomRight);
+
+	std::transform(matrix.begin(), matrix.end(), std::back_inserter(result), [&charImg](const WalshImage &probe)
 	{
-		return countMatches(img, probe);
+		return countMatches(charImg, probe);
 	});
 
 	return result;
 }
 
 } // namespace walsh
+
+} // namespace feature
 
 } // namespace arialrec

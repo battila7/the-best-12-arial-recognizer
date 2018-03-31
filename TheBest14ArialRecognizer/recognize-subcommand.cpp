@@ -2,7 +2,7 @@
 #include "image.h"
 #include "preprocessing.h"
 #include "segmentation.h"
-#include "walsh.h"
+#include "feature/walsh.h"
 
 #include "recognize_subcommand.h"
 
@@ -58,7 +58,7 @@ static void runSubcommand(const Arguments &args)
 		}
 	}*/
 
-	std::vector<walsh::WalshImage> wm = walsh::computeWalshMatrix();
+	/*std::vector<feature::walsh::WalshImage> wm = walsh::computeWalshMatrix();
 
 	for (walsh::WalshImage &wi : wm)
 	{
@@ -77,7 +77,7 @@ static void runSubcommand(const Arguments &args)
 		std::cout << counter << std::endl;
 
 		ss.str("");
-	}
+	}*/
 }
 
 void addRecognizeSubcommand(CLI::App &app)
