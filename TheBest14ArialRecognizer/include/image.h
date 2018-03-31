@@ -15,6 +15,16 @@ enum class ComponentCount
 	THREE = 3
 };
 
+struct LogicalPosition
+{
+	size_t row, column;
+
+	size_t physical() const
+	{
+		return row * column;
+	}
+};
+
 struct Image
 {
 	brightness_t *data;

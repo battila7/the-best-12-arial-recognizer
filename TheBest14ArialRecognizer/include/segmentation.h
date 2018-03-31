@@ -3,30 +3,17 @@
 
 #include <vector>
 
+#include "image.h"
+
 namespace arialrec
 {
-
-namespace image
-{
-struct Image;
-} // namespace image
 
 namespace segmentation
 {
 
-struct LogicalPosition
-{
-	size_t row, column;
-
-	size_t physical() const
-	{
-		return row * column;
-	}
-};
-
 struct CharacterBox
 {
-	LogicalPosition topLeft, bottomRight;
+	image::LogicalPosition topLeft, bottomRight;
 
 	size_t height() const
 	{
@@ -44,7 +31,15 @@ struct CharacterBox
 	}
 };
 
-std::vector<CharacterBox> identifyCharacterBoxes(const image::Image &img, const size_t minArea, const size_t maxArea);
+
+struct Line
+{
+	image::LogicalPosition topLeft, bottomRight;
+
+	std::vector<CharacterBox> characters;
+};
+
+std::vector<Line> identifyCharacterBoxes(const image::Image &img, const size_t minArea, const size_t maxArea);
 
 } // namespace segmentation
 
