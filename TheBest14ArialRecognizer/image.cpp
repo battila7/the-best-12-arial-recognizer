@@ -11,32 +11,27 @@ namespace arialrec
 namespace image
 {
 
-bool read(const char *path, Image &img)
+bool read(const char *path, RGBImage &img)
 {
 	int channels, width, height;
 
-	img.data = stbi_load(path, &width, &height, &channels, (int)ComponentCount::THREE);
+	img.data = stbi_load(path, &width, &height, &channels, img.componentCount);
 
 	img.width = width;
 	img.height = height;
-	img.componentCount = ComponentCount::THREE;
 
 	return img.data;
 }
 
-bool write(const char *path, const Image &img)
+bool write(const char *path, const RGBImage &img)
 {
-	if (img.componentCount != ComponentCount::THREE)
-	{
-		return false;
-	}
-
-	return stbi_write_bmp(path, img.width, img.height, (int)img.componentCount, img.data);
+	return stbi_write_bmp(path, img.width, img.height, img.componentCount, img.data);
 }
 
-Image copy(const Image &other)
+template <ColorSpace C>
+Image<C> copy(const Image<C> &other)
 {
-	Image newImage = other;
+	Image<C> newImage = other;
 
 	newImage.data = new brightness_t[other.physicalSize()];
 
@@ -45,13 +40,13 @@ Image copy(const Image &other)
 	return newImage;
 }
 
-Image copyRect(const Image &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight)
+template <ColorSpace C>
+Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight)
 {
-	Image newImage = {
+	Image<C> newImage = {
 		nullptr,
 		bottomRight.column - topLeft.column,
 		bottomRight.row - topLeft.row,
-		source.componentCount
 	};
 
 	newImage.data = new brightness_t[newImage.physicalSize()];
@@ -62,7 +57,7 @@ Image copyRect(const Image &source, const LogicalPosition &topLeft, const Logica
 	{
 		for (size_t column = topLeft.column; column < bottomRight.column; ++column)
 		{
-			const int components = (int)source.componentCount;
+			const int components = source.componentCount;
 
 			const brightness_t *sourcePointer = source.data + (column * components + row * components);
 
@@ -75,35 +70,26 @@ Image copyRect(const Image &source, const LogicalPosition &topLeft, const Logica
 	return newImage;
 }
 
-void expandToThreeComponents(Image &img)
+RGBImage expandToThreeComponents(GrayscaleImage &img)
 {
-	if (img.componentCount != ComponentCount::SINGLE)
-	{
-		return;
-	}
-
-	brightness_t *newData = new brightness_t[img.width * img.height * (int)ComponentCount::THREE];
+	brightness_t *newData = new brightness_t[img.width * img.height * img.componentCount];
 
 	for (size_t i = 0; i < img.logicalSize(); ++i)
 	{
-		memset(newData + i * (int)ComponentCount::THREE,
-			   img.data[i * (int)img.componentCount],
-			   (int)ComponentCount::THREE);
+		memset(newData + i * img.componentCount,
+			   img.data[i * img.componentCount],
+			   img.componentCount);
 	}
 
-	delete img.data;
-
-	img.data = newData;
-	img.componentCount = ComponentCount::THREE;
+	return {
+		newData,
+		img.width,
+		img.height
+	};
 }
 
-void tightenToSingleComponent(Image &img)
+ GrayscaleImage tightenToSingleComponent(RGBImage &img)
 {
-	if (img.componentCount != ComponentCount::THREE)
-	{
-		return;
-	}
-
 	brightness_t *newData = new brightness_t[img.width * img.height];
 
 	for (size_t i = 0; i < img.logicalSize(); ++i)
@@ -111,10 +97,11 @@ void tightenToSingleComponent(Image &img)
 		newData[i] = img.data[i * (int)img.componentCount];
 	}
 
-	delete img.data;
-
-	img.data = newData;
-	img.componentCount = ComponentCount::SINGLE;
+	return {
+		newData,
+		img.width,
+		img.height
+	};
 }
 
 } // namespace image

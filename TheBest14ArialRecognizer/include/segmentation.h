@@ -39,7 +39,7 @@ struct Line
 	std::vector<CharacterBox> characters;
 };
 
-std::vector<Line> performSegmentation(const image::Image &img, const size_t minArea, const size_t maxArea);
+std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const size_t minArea, const size_t maxArea);
 
 } // namespace segmentation
 

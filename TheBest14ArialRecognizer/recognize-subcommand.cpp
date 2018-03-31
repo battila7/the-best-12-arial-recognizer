@@ -20,20 +20,20 @@ struct Arguments
 
 static void runSubcommand(const Arguments &args)
 {
-	image::Image img;
+	image::RGBImage rgbImg;
 
-	image::read(args.inputImagePath.c_str(), img);
+	image::read(args.inputImagePath.c_str(), rgbImg);
 
-	preprocessing::toGrayscale(img);
+	image::GrayscaleImage grayscaleImg = preprocessing::toGrayscale(rgbImg);
 
-	preprocessing::toBinary(img, args.binaryThreshold);
+	preprocessing::toBinary(grayscaleImg, args.binaryThreshold);
 
 	if (args.noise > 0)
 	{
-		preprocessing::withAdditiveBinaryNoise(img, args.noise);
+		preprocessing::withAdditiveBinaryNoise(grayscaleImg, args.noise);
 	}
 
-	auto lines = segmentation::performSegmentation(img, 0, 2000);
+	auto lines = segmentation::performSegmentation(grayscaleImg, 0, 2000);
 }
 
 void addRecognizeSubcommand(CLI::App &app)

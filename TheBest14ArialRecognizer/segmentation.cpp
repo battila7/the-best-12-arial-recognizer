@@ -15,7 +15,7 @@ static inline bool isBlack(const image::brightness_t value)
 	return value == image::MIN_BRIGHTNESS_VALUE;
 }
 
-static bool hasBlackInRow(const image::Image &img, const size_t row)
+static bool hasBlackInRow(const image::GrayscaleImage &img, const size_t row)
 {
 	for (size_t column = 0; column < img.width; ++column)
 	{
@@ -28,7 +28,7 @@ static bool hasBlackInRow(const image::Image &img, const size_t row)
 	return false;
 }
 
-static std::optional<size_t> nextEmptyRow(const image::Image &img, const size_t startingRow = 0)
+static std::optional<size_t> nextEmptyRow(const image::GrayscaleImage &img, const size_t startingRow = 0)
 {
 	for (size_t row = startingRow; row < img.height; ++row)
 	{
@@ -41,7 +41,7 @@ static std::optional<size_t> nextEmptyRow(const image::Image &img, const size_t 
 	return {};
 }
 
-static std::optional<size_t> nextNonEmptyRow(const image::Image &img, const size_t startingRow = 0)
+static std::optional<size_t> nextNonEmptyRow(const image::GrayscaleImage &img, const size_t startingRow = 0)
 {
 	for (size_t row = startingRow; row < img.height; ++row)
 	{
@@ -54,7 +54,7 @@ static std::optional<size_t> nextNonEmptyRow(const image::Image &img, const size
 	return {};
 }
 
-static std::optional<size_t> nextEmptyColumn(const image::Image &img, const size_t lowerRow, const size_t upperRow, const size_t startingColumn)
+static std::optional<size_t> nextEmptyColumn(const image::GrayscaleImage &img, const size_t lowerRow, const size_t upperRow, const size_t startingColumn)
 {
 	for (size_t column = startingColumn; column < img.width; ++column)
 	{
@@ -74,7 +74,7 @@ static std::optional<size_t> nextEmptyColumn(const image::Image &img, const size
 	return {};
 }
 
-static std::optional<size_t> nextNonEmptyColumn(const image::Image &img, const size_t lowerRow, const size_t upperRow, const size_t startingColumn)
+static std::optional<size_t> nextNonEmptyColumn(const image::GrayscaleImage &img, const size_t lowerRow, const size_t upperRow, const size_t startingColumn)
 {
 	for (size_t column = startingColumn; column < img.width; ++column)
 	{
@@ -90,7 +90,7 @@ static std::optional<size_t> nextNonEmptyColumn(const image::Image &img, const s
 	return {};
 }
 
-static std::pair<size_t, size_t> segmentBetweenRows(const image::Image &img, const size_t startingRow, const size_t endingRow, std::vector<CharacterBox> &characters)
+static std::pair<size_t, size_t> segmentBetweenRows(const image::GrayscaleImage &img, const size_t startingRow, const size_t endingRow, std::vector<CharacterBox> &characters)
 {
 	std::optional<size_t> startingColumn;
 	size_t column = 0, endingColumn = 0;
@@ -126,7 +126,7 @@ static std::pair<size_t, size_t> segmentBetweenRows(const image::Image &img, con
 	return { startingColumn.value_or(0), endingColumn };
 }
 
-static std::pair<Line, size_t> segmentLine(const image::Image &img, const size_t startingRow)
+static std::pair<Line, size_t> segmentLine(const image::GrayscaleImage &img, const size_t startingRow)
 {
 	Line line;
 
@@ -151,14 +151,9 @@ static void filterByArea(std::vector<CharacterBox> &characters, const size_t min
 	}), characters.end());
 }
 
-std::vector<Line> performSegmentation(const image::Image &img, const size_t minArea, const size_t maxArea)
+std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const size_t minArea, const size_t maxArea)
 {
 	std::vector<Line> lines;
-
-	if (img.componentCount != image::ComponentCount::SINGLE)
-	{
-		return lines;
-	}
 
 	size_t row = 0;
 

@@ -12,27 +12,18 @@ using brightness_t = unsigned char;
 constexpr brightness_t MIN_BRIGHTNESS_VALUE = 0;
 constexpr brightness_t MAX_BRIGHTNESS_VALUE = 255;
 
-enum class ComponentCount
+enum class ColorSpace
 {
-	SINGLE = 1,
-	THREE = 3
+	GRAYSCALE = 1,
+	RGB = 3
 };
 
-struct LogicalPosition
-{
-	size_t row, column;
-
-	size_t physical() const
-	{
-		return row * column;
-	}
-};
-
+template <ColorSpace C>
 struct Image
 {
 	brightness_t *data;
 	size_t width, height;
-	ComponentCount componentCount;
+	const int componentCount = (int)C;
 
 	size_t logicalSize() const
 	{
@@ -45,17 +36,32 @@ struct Image
 	}
 };
 
-bool read(const char *path, Image &img);
+using GrayscaleImage = Image<ColorSpace::GRAYSCALE>;
+using RGBImage = Image<ColorSpace::RGB>;
 
-bool write(const char *path, const Image &img);
+struct LogicalPosition
+{
+	size_t row, column;
 
-Image copy(const Image &other);
+	size_t physical() const
+	{
+		return row * column;
+	}
+};
 
-Image copyRect(const Image &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight);
+bool read(const char *path, RGBImage &img);
 
-void expandToThreeComponents(Image &img);
+bool write(const char *path, const RGBImage &img);
 
-void tightenToSingleComponent(Image &img);
+template <ColorSpace C>
+Image<C> copy(const Image<C> &other);
+
+template <ColorSpace C>
+Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight);
+
+RGBImage expandToThreeComponents(GrayscaleImage &img);
+
+GrayscaleImage tightenToSingleComponent(RGBImage &img);
 
 } // namespace arialrec
 

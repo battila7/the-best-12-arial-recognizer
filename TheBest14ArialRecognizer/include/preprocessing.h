@@ -9,11 +9,11 @@ namespace arialrec
 namespace preprocessing
 {
 
-void toGrayscale(image::Image &img);
+image::GrayscaleImage toGrayscale(image::RGBImage &img);
 
-void toBinary(image::Image &img, const image::brightness_t threshold);
+void toBinary(image::GrayscaleImage &img, const image::brightness_t threshold);
 
-void withAdditiveBinaryNoise(image::Image &img, const int percentage);
+void withAdditiveBinaryNoise(image::GrayscaleImage &img, const int percentage);
 
 } // namespace preprocessing
 

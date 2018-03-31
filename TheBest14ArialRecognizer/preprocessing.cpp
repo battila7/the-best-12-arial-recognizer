@@ -12,14 +12,9 @@ namespace arialrec
 namespace preprocessing
 {
 
-void toGrayscale(image::Image &img)
+image::GrayscaleImage toGrayscale(image::RGBImage &img)
 {
 	using image::brightness_t;
-
-	if (img.componentCount != image::ComponentCount::THREE)
-	{
-		return;
-	}
 
 	for (size_t i = 0; i < img.logicalSize(); ++i)
 	{
@@ -29,18 +24,18 @@ void toGrayscale(image::Image &img)
 			+ (brightness_t)(G_WEIGHT * img.data[physicalPosition + 1])
 			+ (brightness_t)(B_WEIGHT * img.data[physicalPosition + 2]);
 
-		memset(img.data + physicalPosition, grayValue, (int)img.componentCount);
+		memset(img.data + physicalPosition, grayValue, img.componentCount);
 	}
 
-	image::tightenToSingleComponent(img);
+	return image::tightenToSingleComponent(img);
 }
 
-void toBinary(image::Image &img, const image::brightness_t threshold)
+void toBinary(image::GrayscaleImage &img, const image::brightness_t threshold)
 {
 	using image::MIN_BRIGHTNESS_VALUE;
 	using image::MAX_BRIGHTNESS_VALUE;
 
-	if ((threshold < MIN_BRIGHTNESS_VALUE) || (threshold > MAX_BRIGHTNESS_VALUE) || (img.componentCount != image::ComponentCount::SINGLE))
+	if ((threshold < MIN_BRIGHTNESS_VALUE) || (threshold > MAX_BRIGHTNESS_VALUE))
 	{
 		return;
 	}
@@ -51,15 +46,10 @@ void toBinary(image::Image &img, const image::brightness_t threshold)
 	}
 }
 
-void withAdditiveBinaryNoise(image::Image &img, const int percentage)
+void withAdditiveBinaryNoise(image::GrayscaleImage &img, const int percentage)
 {
 	using image::MIN_BRIGHTNESS_VALUE;
 	using image::MAX_BRIGHTNESS_VALUE;
-
-	if (img.componentCount != image::ComponentCount::SINGLE)
-	{
-		return;
-	}
 
 	std::random_device randomDevice;
 	std::mt19937 generator(randomDevice());
