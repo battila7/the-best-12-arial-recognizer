@@ -15,6 +15,8 @@ namespace recognition
 
 feature::FeatureMap readFeatureMap(const char *path)
 {
+	std::ifstream featureFile(path, std::ifstream::in);
+
 	return {};
 }
 

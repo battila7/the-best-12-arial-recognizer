@@ -95,6 +95,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,9 +149,10 @@
     <ClCompile Include="area.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="include\feature\position.cpp" />
+    <ClCompile Include="include\subcommand\learn.cpp" />
     <ClCompile Include="preprocessing.cpp" />
     <ClCompile Include="recognition.cpp" />
-    <ClCompile Include="recognize-subcommand.cpp" />
+    <ClCompile Include="recognize.cpp" />
     <ClCompile Include="segmentation.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,14 +167,27 @@
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\preprocessing.h" />
     <ClInclude Include="include\recognition.h" />
-    <ClInclude Include="include\recognize_subcommand.h" />
     <ClInclude Include="include\segmentation.h" />
     <ClInclude Include="include\stbi\stb_image.h" />
     <ClInclude Include="include\stbi\stb_image_resize.h" />
     <ClInclude Include="include\stbi\stb_image_write.h" />
     <ClInclude Include="include\stdafx.h" />
+    <ClInclude Include="include\subcommand\learn.h" />
+    <ClInclude Include="include\subcommand\recognize.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets" Condition="Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" />
+    <Import Project="packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets" Condition="Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets'))" />
+    <Error Condition="!Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets'))" />
+  </Target>
 </Project>

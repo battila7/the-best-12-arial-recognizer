@@ -5,6 +5,7 @@
 #include <array>
 #include <cmath>
 #include <cstdlib>
+#include <fstream>
 #include <limits>
 #include <map>
 #include <memory>
@@ -21,5 +22,8 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
 #include "CLI11/CLI11.hpp"
+
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #endif STDAFX_H
