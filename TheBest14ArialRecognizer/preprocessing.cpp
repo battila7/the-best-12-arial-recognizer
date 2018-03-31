@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "image.h"
 
 #include "preprocessing.h"
 
@@ -18,6 +17,8 @@ namespace preprocessing
 
 void toGrayscale(image::Image &img)
 {
+	using image::brightness_t;
+
 	if (img.componentCount != image::ComponentCount::THREE)
 	{
 		return;
@@ -27,9 +28,9 @@ void toGrayscale(image::Image &img)
 	{
 		const size_t physicalPosition = i * 3;
 
-		const image::brightness_t grayValue = R_WEIGHT * img.data[physicalPosition]
-			+ G_WEIGHT * img.data[physicalPosition + 1]
-			+ B_WEIGHT * img.data[physicalPosition + 2];
+		const brightness_t grayValue = (brightness_t)(R_WEIGHT * img.data[physicalPosition])
+			+ (brightness_t)(G_WEIGHT * img.data[physicalPosition + 1])
+			+ (brightness_t)(B_WEIGHT * img.data[physicalPosition + 2]);
 
 		memset(img.data + physicalPosition, grayValue, (int)img.componentCount);
 	}
@@ -61,7 +62,7 @@ void withAdditiveBinaryNoise(image::Image &img, const int percentage)
 	std::mt19937 generator(randomDevice());
 	std::uniform_int_distribution<> distribution(0, 99);
 
-	for (int i = 0; i < img.physicalSize(); ++i)
+	for (size_t i = 0; i < img.physicalSize(); ++i)
 	{
 		if (distribution(generator) < percentage)
 		{

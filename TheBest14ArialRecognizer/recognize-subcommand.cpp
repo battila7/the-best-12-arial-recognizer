@@ -11,7 +11,7 @@ namespace arialrec
 namespace command
 {
 
-static struct Arguments
+struct Arguments
 {
 	std::string inputImagePath;
 	image::brightness_t binaryThreshold = 127;

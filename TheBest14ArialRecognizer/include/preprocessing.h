@@ -1,17 +1,10 @@
 #ifndef PREPROCESSING_H
 #define PREPROCESSING_H
 
+#include "image.h"
+
 namespace arialrec
 {
-
-namespace image
-{
-
-struct Image;
-
-typedef brightness_t;
-
-} // namespace image
 
 namespace preprocessing
 {
