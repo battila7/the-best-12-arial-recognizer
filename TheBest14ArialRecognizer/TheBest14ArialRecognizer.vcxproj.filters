@@ -45,6 +45,9 @@
     <ClCompile Include="include\feature\position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="recognition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\stdafx.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\feature\position.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\recognition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
