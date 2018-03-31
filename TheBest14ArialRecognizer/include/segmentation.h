@@ -17,12 +17,12 @@ struct CharacterBox
 
 	size_t height() const
 	{
-		return bottomRight.row - topLeft.row;
+		return bottomRight.row - topLeft.row + 1;
 	}
 
 	size_t width() const
 	{
-		return bottomRight.column - topLeft.column;
+		return bottomRight.column - topLeft.column + 1;
 	}
 
 	size_t area() const
