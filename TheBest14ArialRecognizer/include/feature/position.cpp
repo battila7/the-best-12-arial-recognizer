@@ -20,7 +20,7 @@ enum VerticalPosition : feature_t
 	LOWER_HALF = 2000
 };
 
-feature_t verticalPositionInLine(const segmentation::Line &line, const segmentation::CharacterBox &charBox)
+arialrec::feature::feature_t verticalPositionInLine(const segmentation::Line &line, const segmentation::CharacterBox &charBox)
 {
 	const size_t halfRow = (line.bottomRight.row + line.topLeft.row) / 2;
 

@@ -9,6 +9,7 @@ namespace arialrec
 namespace segmentation
 {
 struct CharacterBox;
+struct Line;
 } // namespace segmentation
 
 namespace feature
@@ -17,7 +18,7 @@ namespace feature
 namespace position
 {
 
-feature_t verticalPositionInLine(const segmentation::CharacterBox &charBox);
+feature_t verticalPositionInLine(const segmentation::Line &line, const segmentation::CharacterBox &charBox);
 
 } // namespace position
 
