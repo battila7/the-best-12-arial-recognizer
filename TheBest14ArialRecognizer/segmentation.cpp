@@ -90,6 +90,33 @@ static std::optional<size_t> nextNonEmptyColumn(const image::GrayscaleImage &img
 	return {};
 }
 
+static void cropCharacter(const image::GrayscaleImage img, CharacterBox &box)
+{
+	for (size_t row = box.topLeft.row; row < box.bottomRight.row; ++row)
+	{
+		for (size_t column = box.topLeft.column; column < box.bottomRight.column; ++column)
+		{
+			if (isBlack(img.data[row * img.width + column]))
+			{
+				box.topLeft.row = row;
+				break;
+			}
+		}
+	}
+
+	for (size_t row = box.bottomRight.row; row > box.topLeft.row; --row)
+	{
+		for (size_t column = box.topLeft.column; column < box.bottomRight.column; ++column)
+		{
+			if (isBlack(img.data[row * img.width + column]))
+			{
+				box.bottomRight.row = row;
+				break;
+			}
+		}
+	}
+}
+
 static std::pair<size_t, size_t> segmentBetweenRows(const image::GrayscaleImage &img, const size_t startingRow, const size_t endingRow, std::vector<CharacterBox> &characters)
 {
 	std::optional<size_t> startingColumn;
@@ -164,6 +191,8 @@ std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const si
 			auto [line, endRow] = segmentLine(img, nonEmptyRow.value());
 
 			filterByArea(line.characters, minArea, maxArea);
+
+			std::for_each(line.characters.begin(), line.characters.end(), [img](CharacterBox &box) { cropCharacter(img, box); });
 
 			lines.push_back(line);
 
