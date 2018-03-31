@@ -9,6 +9,9 @@ namespace image
 
 using brightness_t = unsigned char;
 
+constexpr brightness_t MIN_BRIGHTNESS_VALUE = 0;
+constexpr brightness_t MAX_BRIGHTNESS_VALUE = 255;
+
 enum class ComponentCount
 {
 	SINGLE = 1,

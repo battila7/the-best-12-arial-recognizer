@@ -3,8 +3,10 @@
 
 #include <cstdlib>
 #include <memory>
+#include <optional>
 #include <random>
 #include <string>
+#include <utility>
 #include <vector>
 
 #define STBI_MSC_SECURE_CRT
