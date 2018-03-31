@@ -32,7 +32,7 @@ static std::optional<size_t> nextEmptyRow(const image::Image &img, const size_t 
 {
 	for (size_t row = startingRow; row < img.height; ++row)
 	{
-		if (hasBlackInRow(img, row))
+		if (!hasBlackInRow(img, row))
 		{
 			return { row };
 		}
@@ -45,7 +45,7 @@ static std::optional<size_t> nextNonEmptyRow(const image::Image &img, const size
 {
 	for (size_t row = startingRow; row < img.height; ++row)
 	{
-		if (!hasBlackInRow(img, row))
+		if (hasBlackInRow(img, row))
 		{
 			return { row };
 		}
@@ -62,7 +62,7 @@ static std::optional<size_t> nextEmptyColumn(const image::Image &img, const size
 
 		for (size_t row = lowerRow; row < upperRow; ++row)
 		{
-			hasBlack = isBlack(img.data[row * img.width + column]);
+			hasBlack |= isBlack(img.data[row * img.width + column]);
 		}
 
 		if (!hasBlack)
@@ -143,7 +143,15 @@ static std::pair<Line, size_t> segmentLine(const image::Image &img, const size_t
 	return { line, emptyRow.value_or(startingRow + 1) };
 }
 
-std::vector<Line> identifyCharacterBoxes(const image::Image &img, const size_t minArea, const size_t maxArea)
+static void filterByArea(std::vector<CharacterBox> &characters, const size_t minArea, const size_t maxArea)
+{
+	characters.erase(std::remove_if(characters.begin(), characters.end(), [minArea, maxArea](const CharacterBox &box)
+	{
+		return (box.area() <= minArea) || (box.area() >= maxArea);
+	}), characters.end());
+}
+
+std::vector<Line> performSegmentation(const image::Image &img, const size_t minArea, const size_t maxArea)
 {
 	std::vector<Line> lines;
 
@@ -158,7 +166,9 @@ std::vector<Line> identifyCharacterBoxes(const image::Image &img, const size_t m
 	{
 		if (const auto nonEmptyRow = nextNonEmptyRow(img, row); nonEmptyRow.has_value())
 		{
-			const auto [line, endRow] = segmentLine(img, nonEmptyRow.value());
+			auto [line, endRow] = segmentLine(img, nonEmptyRow.value());
+
+			filterByArea(line.characters, minArea, maxArea);
 
 			lines.push_back(line);
 
@@ -175,4 +185,4 @@ std::vector<Line> identifyCharacterBoxes(const image::Image &img, const size_t m
 
 } // segmentation
 
-} // namespace arielrec
+} // namespace arialrec

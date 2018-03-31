@@ -1,6 +1,7 @@
 #ifndef STDAFX_H
 #define STDAFX_H
 
+#include <algorithm>
 #include <cstdlib>
 #include <memory>
 #include <optional>
