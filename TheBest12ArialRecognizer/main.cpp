@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv)
 {
-	args::ArgumentParser parser("The Best Size 14 Arial Text Recognizer");
+	args::ArgumentParser parser("The Best Size 12 Arial Text Recognizer");
 
 	args::Group commands(parser, "commands");
 	args::Command learn(commands, "learn", "Supervised learning of features based on an example image.", &arialrec::command::learn);
