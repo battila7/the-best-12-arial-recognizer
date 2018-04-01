@@ -59,7 +59,7 @@ static feature::FeatureMap supervisedLearning(const image::RGBImage &rgbImage, c
 		      << "Enter an empty line to exit." << std::endl;
 
 	feature::FeatureMap featureMap;
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "The Best 14 Arial Recognizer");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "The Best 12 Arial Recognizer");
 
 	for (const auto &line : lines)
 	{

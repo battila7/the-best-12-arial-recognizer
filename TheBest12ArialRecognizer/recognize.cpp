@@ -69,7 +69,7 @@ static void runSubcommand(const Arguments &args)
 
 	image::GrayscaleImage grayscaleImage = preprocessing::toGrayscale(originalImage);
 
-	preprocessing::toBinary(grayscaleImage, 127);
+	preprocessing::toBinary(grayscaleImage, args.binaryThreshold);
 
 	if (args.noise > 0)
 	{

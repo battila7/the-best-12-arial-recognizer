@@ -26,7 +26,7 @@ The command accepts the following arguments:
 | `--min-area` | The minimum area a character should take up. | `0` |
 | `--max-area` | The maximum area a character should take up. | `20000` |
 
-An example learning input file is placed in the data folder ([data/learn-input.jpg](data/learn-input.jpg)). This contains each letter from the english alphabet (with the capital variants included), the digits 0-9 and some punctuation marks. The feature file produced by the *learning* the contents of this input is placed in the same directory ([data/features.txt](data/features.txt)), so that you can skip the learning part if you prefer.
+An example learning input file is placed in the data folder ([data/learn-input.jpg](data/learn-input.jpg)). This contains each letter from the english alphabet (with the capital variants included), the digits 0-9 and some punctuation marks. The feature file produced by *learning* the contents of this input is placed in the same directory ([data/features.txt](data/features.txt)), so that you can skip the learning part if you prefer.
 
 Of course, we're talking about supervised learning here. Individual characters are segmented from the original image and then displayed in a window for the trainer. The trainer then should input the character to the program. This makes the program connect the character and the feature vector of the segment.
 
@@ -94,11 +94,11 @@ Basically, we've got some oldskool character recognition here, consisting of thr
 
 First, you feed the program some RGB image file. This is converted into grayscale (one brightness value per pixel) and lastly into binary (either 0 or 255, nothing in between - controlled by the `--binary-threshold` argument).
 
-In recognition mode, you can even add some additive noise to the image as part of the recognition phase (`--noise` argument).
+In recognition mode, you can even add some additive noise to the image as part of the preprocessing phase (`--noise` argument).
 
 ### Segmentation
 
-The next step is to divide our binary image into smaller parts that contain only a single character. This is done by the segmentation module. It scans the image from the first row until it finds a row that has at least one black pixel. This row is marked as the beginning of a line. Then, the scanning continues until the first completely white row. The row preceding this one's marked as the end of the current line.
+The next step is to divide our binary image into smaller parts that contain only a single character. This is done by the segmentation module. It scans the image from the first row until it finds a row that has at least one black pixel. This row is marked as the beginning of a line. Then, the scanning continues until it hits the first completely white row. The row preceding this one's marked as the end of the current line.
 
 At this point, we've identified a line. We can now continue by slicing up this line vertically using a method analogous to the previous algorithm.
 
@@ -112,11 +112,11 @@ The output of the segmentation is a list of lines consisting of bounding boxes.
 
 The recognition module takes an image, a list of lines with bounding boxes and feature map as its input. The latter maps actual characters to feature vectors - this map is the most crucial part of the recognition phase.
 
-First the average distance is calculated between the characters. This value is used to determine, whether a space should be placed between two recognized characters or not.
+First the average distance is calculated between the characters. This value is used to determine whether a space should be placed between two recognized characters or not.
 
 Afterwards, the real recognition begins. We take a single character at a time, and calculate its feature vector. As of this moment, the feature vector of TB12AR contains 68 values:
 
-  * 64 Walsh values, calculated by AND-ing the bounding box of a character (to be exact, it's resized to 64x64 pixels) with 64 Walsh basis images.
+  * 64 Walsh values, calculated by AND-ing the bounding box of the character (to be exact, it's resized to 64x64 pixels) with 64 Walsh basis images.
   * The area of the bounding box (with some function applied to it, but it's not that interesting for now).
   * The width of the bounding box.
   * The height of the bounding box.
