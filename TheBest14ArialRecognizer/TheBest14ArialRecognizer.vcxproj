@@ -160,7 +160,7 @@
     <ClCompile Include="walsh.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CLI11\CLI11.hpp" />
+    <ClInclude Include="include\args\args.hpp" />
     <ClInclude Include="include\feature\area.h" />
     <ClInclude Include="include\feature\position.h" />
     <ClInclude Include="include\feature\types.h" />

@@ -1,7 +1,7 @@
 #ifndef SUBCOMMAND_RECOGNIZE_H
 #define SUBCOMMAND_RECOGNIZE_H
 
-#include "CLI11/CLI11.hpp"
+#include "args/args.hpp"
 
 namespace arialrec
 {
@@ -9,7 +9,7 @@ namespace arialrec
 namespace command
 {
 
-void addRecognizeSubcommand(CLI::App &app);
+void recognize(args::Subparser &parser);
 
 } // namespace command
 

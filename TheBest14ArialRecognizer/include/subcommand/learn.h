@@ -1,7 +1,7 @@
 #ifndef SUBCOMMAND_LEARN_H
 #define SUBCOMMAND_LEARN_H
 
-#include "CLI11/CLI11.hpp"
+#include "args/args.hpp"
 
 namespace arialrec
 {
@@ -9,7 +9,7 @@ namespace arialrec
 namespace command
 {
 
-void addLearnSubcommand(CLI::App &app);
+void learn(args::Subparser &parser);
 
 } // namespace command
 

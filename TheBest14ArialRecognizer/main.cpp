@@ -1,20 +1,35 @@
 #include "stdafx.h"
 
-#include "image.h"
 #include "subcommand/learn.h"
 #include "subcommand/recognize.h"
 
 int main(int argc, char **argv)
 {
-	CLI::App app{"The Best Size 14 Arial Text Recognizer"};
+	args::ArgumentParser parser("The Best Size 14 Arial Text Recognizer");
 
-	arialrec::command::addRecognizeSubcommand(app);
+	args::Group commands(parser, "commands");
+	args::Command learn(commands, "learn", "Supervised learning of features based on an example image.", &arialrec::command::learn);
+	args::Command recognize(commands, "recognize", "Recognize the text on the image using the prelearnt features.", &arialrec::command::recognize);
 
-	arialrec::command::addLearnSubcommand(app);
+	args::Group arguments(parser, "arguments");
+	args::HelpFlag h(arguments, "help", "help", { 'h', "help" });
 
-	app.require_subcommand();
+	args::GlobalOptions globals(parser, arguments);
 
-	CLI11_PARSE(app, argc, argv);
+	try
+	{
+		parser.ParseCLI(argc, argv);
+	}
+	catch (args::Help)
+	{
+		std::cout << parser;
+	}
+	catch (const args::Error &e)
+	{
+		std::cerr << e.what() << std::endl << parser;
 
-    return 0;
+		return 1;
+	}
+
+	return 0;
 }

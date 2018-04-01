@@ -12,11 +12,19 @@ namespace arialrec
 namespace command
 {
 
+struct DefaultArguments
+{
+	static constexpr image::brightness_t binaryThreshold = 127;
+	static constexpr int noise = 0;
+};
+
 struct Arguments
 {
 	std::string inputImagePath;
-	int noise = 0;
-	image::brightness_t binaryThreshold = 127;
+	std::string featureFilePath;
+	std::string outputFilePath;
+	int binaryThreshold;
+	int noise;
 };
 
 static void runSubcommand(const Arguments &args)
@@ -31,36 +39,44 @@ static void runSubcommand(const Arguments &args)
 
 	preprocessing::toBinary(grayscaleImage, 127);
 
-	/*if (args.noise > 0)
+	if (args.noise > 0)
 	{
 		preprocessing::withAdditiveBinaryNoise(grayscaleImage, args.noise);
-	}*/
+	}
 
 	const auto lines = segmentation::performSegmentation(grayscaleImage, 0, 2000);
 
 	const std::string text = recognition::recognizeText(grayscaleImage, lines, featureMap, 1000);
 
-	std::ofstream o("out2.txt", std::ofstream::out);
+	std::ofstream output(args.outputFilePath.c_str(), std::ofstream::out);
 
-	o << text;
+	output << text;
 
-	o.close();
+	output.close();
 }
 
-void addRecognizeSubcommand(CLI::App &app)
+void recognize(args::Subparser &parser)
 {
-	CLI::App *recognize = app.add_subcommand("recognize", "Recognize the text on the image using the prelearnt features.");
+	args::ValueFlag<std::string> inputImagePath(parser, "input", "The image file that contains the text to recognize.",
+		{ 'i' }, args::Options::Required);
+	args::ValueFlag<std::string> featureFilePath(parser, "features", "The feature file location to load the features from.",
+		{ 'f' }, args::Options::Required);
+	args::ValueFlag<std::string> outputFilePath(parser, "output", "The file to write the recognized text into.",
+		{ 'o' }, args::Options::Required);
+	args::ValueFlag<image::brightness_t> binaryThreshold(parser, "binary threshold", "The brightness value which is going to be used as a threshold when converting to binary.",
+		{ "binary-threshold" }, DefaultArguments::binaryThreshold);
+	args::ValueFlag<int> noise(parser, "noise", "The percentage of binary noise to add to the input picture (0-100).",
+		{ "noise" }, DefaultArguments::noise);
 
-	std::shared_ptr<Arguments> args = std::make_shared<Arguments>();
+	parser.Parse();
 
-	recognize->add_option("-i", args->inputImagePath, "The image file that contains the text to recognize.")
-		->required();
-	/*recognize->add_option("-f", args->outputFile, "The feature file location to load the features from.")
-		->required();*/
-	recognize->add_option("--binary-threshold", args->binaryThreshold, "The brightness value which is going to be used as a threshold when converting to binary", true);
-	recognize->add_option("--noise", args->noise, "The percentage of binary noise to add to the input picture (0-100).", true);
-
-	recognize->set_callback([args]() { runSubcommand(*args); });
+	runSubcommand({
+		inputImagePath.Get(),
+		featureFilePath.Get(),
+		outputFilePath.Get(),
+		binaryThreshold.Get(),
+		noise.Get()
+	});
 }
 
 } // namespace command

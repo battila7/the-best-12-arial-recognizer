@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <map>
 #include <memory>
@@ -19,7 +20,7 @@
 #define STBI_MSC_SECURE_CRT
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
-#include "CLI11/CLI11.hpp"
+#include "args/args.hpp"
 
 #include "SFML/Graphics.hpp"
 

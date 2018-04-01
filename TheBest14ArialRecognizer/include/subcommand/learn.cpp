@@ -16,11 +16,16 @@ namespace command
 static constexpr int WINDOW_WIDTH = 200;
 static constexpr int WINDOW_HEIGHT = 200;
 
+struct DefaultArguments
+{
+	static constexpr image::brightness_t binaryThreshold = 127;
+};
+
 struct Arguments
 {
 	std::string inputImagePath;
-	image::brightness_t binaryThreshold = 127;
-	std::string outputFile;
+	std::string featureFilePath;
+	image::brightness_t binaryThreshold;
 };
 
 static void displayCharacterImage(sf::RenderWindow &window, const image::RGBImage &characterImage)
@@ -97,22 +102,25 @@ static void runSubcommand(const Arguments &args)
 
 	const feature::FeatureMap featureMap = supervisedLearning(originalImage, grayscaleImage, lines);
 
-	recognition::writeFeatureMap(args.outputFile.c_str(), featureMap);
+	recognition::writeFeatureMap(args.featureFilePath.c_str(), featureMap);
 }
 
-void addLearnSubcommand(CLI::App &app)
+void learn(args::Subparser &parser)
 {
-	CLI::App *learn = app.add_subcommand("learn", "Supervised learning of features based on an example image.");
+	args::ValueFlag<std::string> inputImagePath(parser, "input", "The image file that contains the text to recognize.",
+		{ 'i' }, args::Options::Required);
+	args::ValueFlag<std::string> featureFilePath(parser, "features", "The feature file location to save the learnt features into.", 
+		{ 'f' }, args::Options::Required);
+	args::ValueFlag<image::brightness_t> binaryThreshold(parser, "binary threshold", "The brightness value which is going to be used as a threshold when converting to binary.", 
+		{ "binary-threshold" }, DefaultArguments::binaryThreshold);
 
-	std::shared_ptr<Arguments> args = std::make_shared<Arguments>();
+	parser.Parse();
 
-	learn->add_option("-i", args->inputImagePath, "The image file that contains the text to recognize.")
-		->required();
-	learn->add_option("--binary-threshold", args->binaryThreshold, "The brightness value which is going to be used as a threshold when converting to binary.", true);
-	learn->add_option("-f", args->outputFile, "The feature file location to save the learnt features into.")
-		->required();
-
-	learn->set_callback([args]() { runSubcommand(*args); });
+	runSubcommand({
+		inputImagePath.Get(),
+		featureFilePath.Get(),
+		binaryThreshold.Get()
+	});
 }
 
 } // namespace command
