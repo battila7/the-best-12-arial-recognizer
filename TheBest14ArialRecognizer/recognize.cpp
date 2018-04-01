@@ -12,6 +12,9 @@ namespace arialrec
 namespace command
 {
 
+static constexpr auto CHAR_OUTPUT_PREFIX = "ch-";
+static constexpr auto BMP_FORMAT = ".bmp";
+
 struct DefaultArguments
 {
 	static constexpr image::brightness_t binaryThreshold = 127;
@@ -25,7 +28,30 @@ struct Arguments
 	std::string outputFilePath;
 	int binaryThreshold;
 	int noise;
+	bool outputCharacters;
 };
+
+static void writeCharacters(const image::RGBImage &image, const std::vector<segmentation::Line> &lines)
+{
+	std::stringstream filename;
+	size_t counter = 0;
+
+	for (const auto &line : lines)
+	{
+		for (const auto &ch : line.characters)
+		{
+			const auto chRect = image::copyRect(image, ch.topLeft, ch.bottomRight);
+
+			filename << CHAR_OUTPUT_PREFIX << counter++ << BMP_FORMAT;
+
+			image::write(filename.str().c_str(), chRect);
+
+			delete chRect.data;
+
+			filename.str("");
+		}
+	}
+}
 
 static void runSubcommand(const Arguments &args)
 {
@@ -45,6 +71,11 @@ static void runSubcommand(const Arguments &args)
 	}
 
 	const auto lines = segmentation::performSegmentation(grayscaleImage, 0, 2000);
+
+	if (args.outputCharacters)
+	{
+		writeCharacters(originalImage, lines);
+	}
 
 	const std::string text = recognition::recognizeText(grayscaleImage, lines, featureMap, 1000);
 
@@ -67,6 +98,8 @@ void recognize(args::Subparser &parser)
 		{ "binary-threshold" }, DefaultArguments::binaryThreshold);
 	args::ValueFlag<int> noise(parser, "noise", "The percentage of binary noise to add to the input picture (0-100).",
 		{ "noise" }, DefaultArguments::noise);
+	args::Flag outputCharacters(parser, "output characters", "Output the characters produced by the segmentation phase (writes to the current directory).",
+		{ "output-characters" });
 
 	parser.Parse();
 
@@ -75,7 +108,8 @@ void recognize(args::Subparser &parser)
 		featureFilePath.Get(),
 		outputFilePath.Get(),
 		binaryThreshold.Get(),
-		noise.Get()
+		noise.Get(),
+		outputCharacters.Get()
 	});
 }
 
