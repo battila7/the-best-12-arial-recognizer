@@ -87,7 +87,7 @@ Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const 
 	return newImage;
 }
 
-RGBImage expandToThreeComponents(GrayscaleImage &img)
+RGBImage expandToThreeComponents(const GrayscaleImage &img)
 {
 	RGBImage result = {
 		new brightness_t[img.width * img.height * (int)ColorSpace::RGB],
@@ -103,7 +103,24 @@ RGBImage expandToThreeComponents(GrayscaleImage &img)
 	return result;
 }
 
-GrayscaleImage tightenToSingleComponent(RGBImage &img)
+RGBAImage addAlphaChannel(const RGBImage &img)
+{
+	RGBAImage result = {
+		new brightness_t[img.width * img.height * (int)ColorSpace::RGBA],
+		img.width,
+		img.height
+	};
+
+	for (size_t i = 0; i < img.logicalSize(); ++i)
+	{
+		memcpy(result.data + i * result.componentCount, img.data + i * img.componentCount, img.componentCount);
+		result.data[i * result.componentCount + 3] = MAX_BRIGHTNESS_VALUE;
+	}
+
+	return result;
+}
+
+GrayscaleImage tightenToSingleComponent(const RGBImage &img)
 {
 	GrayscaleImage result = {
 		new brightness_t[img.width * img.height],

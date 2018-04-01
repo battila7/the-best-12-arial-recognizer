@@ -25,7 +25,7 @@ void writeFeatureMap(const char *path, const feature::FeatureMap &featureMap)
 
 }
 
-feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::Line line, const segmentation::CharacterBox charBox)
+feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::Line line, const segmentation::CharacterBox &charBox)
 {
 	feature::FeatureVector featureVector = feature::walsh::computeWalshValues(img, charBox);
 

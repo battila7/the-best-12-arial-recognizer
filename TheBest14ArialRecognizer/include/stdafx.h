@@ -17,13 +17,10 @@
 #include <vector>
 
 #define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
 #include "CLI11/CLI11.hpp"
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
+#include "SFML/Graphics.hpp"
 
 #endif STDAFX_H

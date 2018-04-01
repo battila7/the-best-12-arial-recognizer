@@ -12,6 +12,7 @@ namespace arialrec
 
 namespace segmentation
 {
+struct CharacterBox;
 struct Line;
 } // namespace segmentation
 
@@ -25,7 +26,7 @@ feature::FeatureMap readFeatureMap(const char *path);
 
 void writeFeatureMap(const char *path, const feature::FeatureMap &featureMap);
 
-feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::Line line, const segmentation::CharacterBox charBox);
+feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::Line line, const segmentation::CharacterBox &charBox);
 
 std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const feature::FeatureMap &featureMap, const distance_t recognitionThreshold);
 

@@ -89,13 +89,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SFML_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;winmm.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)packages\sfml-system.2.4.2.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-window.2.4.2.0\build\native\lib\Win32\v140\Debug\static;$(SolutionDir)packages\sfml-graphics.2.4.2.0\build\native\lib\Win32\v140\Debug\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -180,14 +181,22 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets" Condition="Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" />
-    <Import Project="packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets" Condition="Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" />
+    <Import Project="packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets" Condition="Exists('packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets')" />
+    <Import Project="packages\sfml-system.2.4.2.0\build\native\sfml-system.targets" Condition="Exists('packages\sfml-system.2.4.2.0\build\native\sfml-system.targets')" />
+    <Import Project="packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets" Condition="Exists('packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets')" />
+    <Import Project="packages\sfml-window.2.4.2.0\build\native\sfml-window.targets" Condition="Exists('packages\sfml-window.2.4.2.0\build\native\sfml-window.targets')" />
+    <Import Project="packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets" Condition="Exists('packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets')" />
+    <Import Project="packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets" Condition="Exists('packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.redist.0.1.0.1\build\native\nupengl.core.redist.targets'))" />
-    <Error Condition="!Exists('packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nupengl.core.0.1.0.1\build\native\nupengl.core.targets'))" />
+    <Error Condition="!Exists('packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-system.2.4.2.0\build\native\sfml-system.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-system.2.4.2.0\build\native\sfml-system.targets'))" />
+    <Error Condition="!Exists('packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-window.2.4.2.0\build\native\sfml-window.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-window.2.4.2.0\build\native\sfml-window.targets'))" />
+    <Error Condition="!Exists('packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets'))" />
   </Target>
 </Project>

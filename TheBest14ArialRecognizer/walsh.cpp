@@ -119,7 +119,7 @@ FeatureVector computeWalshValues(const image::GrayscaleImage &img, const segment
 	FeatureVector result;
 
 	auto charImg = image::copyRect(img, charBox.topLeft, charBox.bottomRight);
-	auto resizedCharImg = image::resize(img, IMAGE_DIMENSION, IMAGE_DIMENSION);
+	auto resizedCharImg = image::resize(charImg, IMAGE_DIMENSION, IMAGE_DIMENSION);
 
 	std::transform(matrix.begin(), matrix.end(), std::back_inserter(result), [&resizedCharImg](const WalshImage &probe)
 	{

@@ -15,7 +15,8 @@ constexpr brightness_t MAX_BRIGHTNESS_VALUE = 255;
 enum class ColorSpace
 {
 	GRAYSCALE = 1,
-	RGB = 3
+	RGB = 3,
+	RGBA = 4
 };
 
 template <ColorSpace C>
@@ -38,6 +39,7 @@ struct Image
 
 using GrayscaleImage = Image<ColorSpace::GRAYSCALE>;
 using RGBImage = Image<ColorSpace::RGB>;
+using RGBAImage = Image<ColorSpace::RGBA>;
 
 struct LogicalPosition
 {
@@ -62,9 +64,11 @@ Image<C> copy(const Image<C> &other);
 template <ColorSpace C>
 Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const LogicalPosition &bottomRight);
 
-RGBImage expandToThreeComponents(GrayscaleImage &img);
+RGBImage expandToThreeComponents(const GrayscaleImage &img);
 
-GrayscaleImage tightenToSingleComponent(RGBImage &img);
+RGBAImage addAlphaChannel(const RGBImage &img);
+
+GrayscaleImage tightenToSingleComponent(const RGBImage &img);
 
 } // namespace arialrec
 

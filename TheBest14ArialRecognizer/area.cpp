@@ -15,7 +15,7 @@ namespace area
 
 feature_t compute(const segmentation::CharacterBox &charBox)
 {
-	const int truncatedArea = (int)charBox.area() / 10;
+	const float truncatedArea = (float)charBox.area() / 100.f;
 
 	return (feature_t)std::exp(truncatedArea);
 }
