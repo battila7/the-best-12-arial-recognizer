@@ -19,6 +19,8 @@ static constexpr int WINDOW_HEIGHT = 200;
 struct DefaultArguments
 {
 	static constexpr image::brightness_t binaryThreshold = 127;
+	static constexpr size_t minCharacterArea = segmentation::DefaultConfiguration::minArea;
+	static constexpr size_t maxCharacterArea = segmentation::DefaultConfiguration::maxArea;
 };
 
 struct Arguments
@@ -26,6 +28,8 @@ struct Arguments
 	std::string inputImagePath;
 	std::string featureFilePath;
 	image::brightness_t binaryThreshold;
+	size_t minCharacterArea;
+	size_t maxCharacterArea;
 };
 
 static void displayCharacterImage(sf::RenderWindow &window, const image::RGBImage &characterImage)
@@ -98,7 +102,10 @@ static void runSubcommand(const Arguments &args)
 
 	preprocessing::toBinary(grayscaleImage, args.binaryThreshold);
 
-	const auto lines = segmentation::performSegmentation(grayscaleImage, 0, 2000);
+	const auto lines = segmentation::performSegmentation(grayscaleImage, {
+		args.minCharacterArea,
+		args.maxCharacterArea
+	});
 
 	const feature::FeatureMap featureMap = supervisedLearning(originalImage, grayscaleImage, lines);
 
@@ -113,14 +120,22 @@ void learn(args::Subparser &parser)
 		{ 'f' }, args::Options::Required);
 	args::ValueFlag<image::brightness_t> binaryThreshold(parser, "binary threshold", "The brightness value which is going to be used as a threshold when converting to binary.", 
 		{ "binary-threshold" }, DefaultArguments::binaryThreshold);
+	args::ValueFlag<size_t> minCharacterArea(parser, "minimal character area", "The minimum area a character should take up.",
+		{ "min-area" }, DefaultArguments::minCharacterArea);
+	args::ValueFlag<size_t> maxCharacterArea(parser, "maximal character area", "The maximum area a character should take up.",
+		{ "max-area" }, DefaultArguments::maxCharacterArea);
 
 	parser.Parse();
 
-	runSubcommand({
-		inputImagePath.Get(),
-		featureFilePath.Get(),
-		binaryThreshold.Get()
-	});
+	Arguments arguments{};
+
+	arguments.inputImagePath = args::get(inputImagePath);
+	arguments.featureFilePath = args::get(featureFilePath);
+	arguments.binaryThreshold = args::get(binaryThreshold);
+	arguments.minCharacterArea = args::get(minCharacterArea);
+	arguments.maxCharacterArea = args::get(maxCharacterArea);
+
+	runSubcommand(arguments);
 }
 
 } // namespace command

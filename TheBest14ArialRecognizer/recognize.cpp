@@ -19,6 +19,9 @@ struct DefaultArguments
 {
 	static constexpr image::brightness_t binaryThreshold = 127;
 	static constexpr int noise = 0;
+	static constexpr recognition::distance_t recognitionThreshold = recognition::DefaultConfiguration::recognitionThreshold;
+	static constexpr size_t minCharacterArea = segmentation::DefaultConfiguration::minArea;
+	static constexpr size_t maxCharacterArea = segmentation::DefaultConfiguration::maxArea;
 };
 
 struct Arguments
@@ -26,9 +29,12 @@ struct Arguments
 	std::string inputImagePath;
 	std::string featureFilePath;
 	std::string outputFilePath;
-	int binaryThreshold;
+	image::brightness_t binaryThreshold;
 	int noise;
 	bool outputCharacters;
+	recognition::distance_t recognitionThreshold;
+	size_t minCharacterArea;
+	size_t maxCharacterArea;
 };
 
 static void writeCharacters(const image::RGBImage &image, const std::vector<segmentation::Line> &lines)
@@ -59,7 +65,7 @@ static void runSubcommand(const Arguments &args)
 
 	image::read(args.inputImagePath.c_str(), originalImage);
 
-	const feature::FeatureMap featureMap = recognition::readFeatureMap("features2.txt");
+	const feature::FeatureMap featureMap = recognition::readFeatureMap(args.featureFilePath.c_str());
 
 	image::GrayscaleImage grayscaleImage = preprocessing::toGrayscale(originalImage);
 
@@ -70,14 +76,19 @@ static void runSubcommand(const Arguments &args)
 		preprocessing::withAdditiveBinaryNoise(grayscaleImage, args.noise);
 	}
 
-	const auto lines = segmentation::performSegmentation(grayscaleImage, 0, 2000);
+	const auto lines = segmentation::performSegmentation(grayscaleImage, {
+		args.minCharacterArea,
+		args.maxCharacterArea
+	});
 
 	if (args.outputCharacters)
 	{
 		writeCharacters(originalImage, lines);
 	}
 
-	const std::string text = recognition::recognizeText(grayscaleImage, lines, featureMap, 1000);
+	const std::string text = recognition::recognizeText(grayscaleImage, lines, featureMap, {
+		args.recognitionThreshold
+	});
 
 	std::ofstream output(args.outputFilePath.c_str(), std::ofstream::out);
 
@@ -98,19 +109,30 @@ void recognize(args::Subparser &parser)
 		{ "binary-threshold" }, DefaultArguments::binaryThreshold);
 	args::ValueFlag<int> noise(parser, "noise", "The percentage of binary noise to add to the input picture (0-100).",
 		{ "noise" }, DefaultArguments::noise);
+	args::ValueFlag<recognition::distance_t> recognitionThreshold(parser, "recognition threshold", "The maximal feature vector distance that is considered a match.",
+		{ "recognition-threshold" }, DefaultArguments::recognitionThreshold);
+	args::ValueFlag<size_t> minCharacterArea(parser, "minimal character area", "The minimum area a character should take up.",
+		{ "min-area" }, DefaultArguments::minCharacterArea);
+	args::ValueFlag<size_t> maxCharacterArea(parser, "maximal character area", "The maximum area a character should take up.",
+		{ "max-area" }, DefaultArguments::maxCharacterArea);
 	args::Flag outputCharacters(parser, "output characters", "Output the characters produced by the segmentation phase (writes to the current directory).",
 		{ "output-characters" });
 
 	parser.Parse();
 
-	runSubcommand({
-		inputImagePath.Get(),
-		featureFilePath.Get(),
-		outputFilePath.Get(),
-		binaryThreshold.Get(),
-		noise.Get(),
-		outputCharacters.Get()
-	});
+	Arguments arguments{};
+
+	arguments.inputImagePath = args::get(inputImagePath);
+	arguments.featureFilePath = args::get(featureFilePath);
+	arguments.outputFilePath = args::get(outputFilePath);
+	arguments.binaryThreshold = args::get(binaryThreshold);
+	arguments.noise = args::get(noise);
+	arguments.outputCharacters = args::get(outputCharacters);
+	arguments.recognitionThreshold = args::get(recognitionThreshold);
+	arguments.minCharacterArea = args::get(minCharacterArea);
+	arguments.maxCharacterArea = args::get(maxCharacterArea);
+
+	runSubcommand(arguments);
 }
 
 } // namespace command

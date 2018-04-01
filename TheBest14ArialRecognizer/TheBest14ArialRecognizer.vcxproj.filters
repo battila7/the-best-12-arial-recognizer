@@ -36,9 +36,6 @@
     <ClCompile Include="walsh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="area.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="include\feature\position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\subcommand\learn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="size.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,9 +74,6 @@
     <ClInclude Include="include\segmentation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\feature\area.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\feature\walsh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\args\args.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\size.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

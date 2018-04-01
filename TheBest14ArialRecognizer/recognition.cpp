@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include "feature/area.h"
 #include "feature/position.h"
+#include "feature/size.h"
 #include "feature/walsh.h"
 #include "segmentation.h"
 
@@ -71,7 +71,9 @@ feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img
 {
 	feature::FeatureVector featureVector = feature::walsh::computeWalshValues(img, charBox);
 
-	featureVector.push_back(feature::area::compute(charBox));
+	featureVector.push_back(feature::size::computeSize(charBox));
+	featureVector.push_back(feature::size::computeWidth(charBox));
+	featureVector.push_back(feature::size::computeHeight(charBox));
 	featureVector.push_back(feature::position::verticalPositionInLine(line, charBox));
 
 	return featureVector;
@@ -128,7 +130,7 @@ static std::pair<char, distance_t> tryRecognize(const image::GrayscaleImage &img
 	return { result, minDistance };
 }
 
-std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const feature::FeatureMap &featureMap, const distance_t recognitionThreshold)
+std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const feature::FeatureMap &featureMap, const Configuration &conf)
 {
 	std::stringstream text;
 	
@@ -140,7 +142,7 @@ std::string recognizeText(const image::GrayscaleImage &img, const std::vector<se
 		{
 			const auto [recognizedCharacter, distance] = tryRecognize(img, line, line.characters[i], featureMap);
 
-			text << (distance < recognitionThreshold ? recognizedCharacter : '?');
+			text << (distance < conf.recognitionThreshold ? recognizedCharacter : '?');
 
 			if (i < line.characters.size() - 1)
 			{

@@ -147,7 +147,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="area.cpp" />
+    <ClCompile Include="size.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="include\feature\position.cpp" />
     <ClCompile Include="include\subcommand\learn.cpp" />
@@ -161,7 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\args\args.hpp" />
-    <ClInclude Include="include\feature\area.h" />
+    <ClInclude Include="include\feature\size.h" />
     <ClInclude Include="include\feature\position.h" />
     <ClInclude Include="include\feature\types.h" />
     <ClInclude Include="include\feature\walsh.h" />

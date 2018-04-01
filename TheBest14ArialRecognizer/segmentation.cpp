@@ -179,7 +179,7 @@ static void filterByArea(std::vector<CharacterBox> &characters, const size_t min
 	}), characters.end());
 }
 
-std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const size_t minArea, const size_t maxArea)
+std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const Configuration &conf)
 {
 	std::vector<Line> lines;
 
@@ -191,9 +191,9 @@ std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const si
 		{
 			auto [line, endRow] = segmentLine(img, nonEmptyRow.value());
 
-			filterByArea(line.characters, minArea, maxArea);
-
 			std::for_each(line.characters.begin(), line.characters.end(), [img](CharacterBox &box) { cropCharacter(img, box); });
+
+			filterByArea(line.characters, conf.minArea, conf.maxArea);
 
 			lines.push_back(line);
 

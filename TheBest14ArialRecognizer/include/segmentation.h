@@ -39,7 +39,19 @@ struct Line
 	std::vector<CharacterBox> characters;
 };
 
-std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const size_t minArea, const size_t maxArea);
+struct DefaultConfiguration
+{
+	static constexpr size_t minArea = 0;
+	static constexpr size_t maxArea = 20000;
+};
+
+struct Configuration
+{
+	size_t minArea = DefaultConfiguration::minArea;
+	size_t maxArea = DefaultConfiguration::maxArea;
+};
+
+std::vector<Line> performSegmentation(const image::GrayscaleImage &img, const Configuration &conf);
 
 } // namespace segmentation
 
