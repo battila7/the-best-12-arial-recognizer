@@ -15,14 +15,49 @@ namespace recognition
 
 feature::FeatureMap readFeatureMap(const char *path)
 {
+	feature::FeatureMap featureMap;
 	std::ifstream featureFile(path, std::ifstream::in);
 
-	return {};
+	std::string input;
+
+	while (std::getline(featureFile, input))
+	{
+		std::istringstream iss(input);
+
+		char ch;
+		feature::FeatureVector fv;
+
+		while (iss)
+		{
+			feature::feature_t f;
+			iss >> f;
+
+			fv.push_back(f);
+		}
+
+		featureMap[ch] = fv;
+	}
+	
+	return featureMap;
 }
 
 void writeFeatureMap(const char *path, const feature::FeatureMap &featureMap)
 {
+	std::ofstream featureFile(path, std::ofstream::out);
 
+	for (auto it = featureMap.begin(); it != featureMap.end(); ++it)
+	{
+		featureFile << it->first;
+
+		for (const feature::feature_t f : it->second)
+		{
+			featureFile << " " << f;
+		}
+
+		featureFile << std::endl;
+	}
+
+	featureFile.close();
 }
 
 feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img, const segmentation::Line line, const segmentation::CharacterBox &charBox)
