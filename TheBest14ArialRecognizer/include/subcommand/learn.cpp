@@ -102,17 +102,17 @@ static void runSubcommand(const Arguments &args)
 
 void addLearnSubcommand(CLI::App &app)
 {
-	CLI::App *recognize = app.add_subcommand("learn", "Supervised learning of features based on an example image.");
+	CLI::App *learn = app.add_subcommand("learn", "Supervised learning of features based on an example image.");
 
 	std::shared_ptr<Arguments> args = std::make_shared<Arguments>();
 
-	recognize->add_option("-f", args->inputImagePath, "The image file that contains the text to recognize")
+	learn->add_option("-i", args->inputImagePath, "The image file that contains the text to recognize.")
 		->required();
-	recognize->add_option("--binary-threshold", args->binaryThreshold, "The brightness value which is going to be used as a threshold when converting to binary", true);
-	recognize->add_option("-o", args->outputFile, "The file to save the feature data into.")
+	learn->add_option("--binary-threshold", args->binaryThreshold, "The brightness value which is going to be used as a threshold when converting to binary.", true);
+	learn->add_option("-f", args->outputFile, "The feature file location to save the learnt features into.")
 		->required();
 
-	recognize->set_callback([args]() { runSubcommand(*args); });
+	learn->set_callback([args]() { runSubcommand(*args); });
 }
 
 } // namespace command

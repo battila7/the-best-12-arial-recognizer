@@ -13,10 +13,13 @@ namespace arialrec
 namespace recognition
 {
 
+static constexpr float SPACE_DISTORTION_FACTOR = 1.2f;
+
 feature::FeatureMap readFeatureMap(const char *path)
 {
 	feature::FeatureMap featureMap;
-	std::ifstream featureFile(path, std::ifstream::in);
+	std::ifstream featureFile;
+	featureFile.open(path, std::ifstream::in);
 
 	std::string input;
 
@@ -27,13 +30,17 @@ feature::FeatureMap readFeatureMap(const char *path)
 		char ch;
 		feature::FeatureVector fv;
 
-		while (iss)
+		iss >> ch;
+
+		do
 		{
 			feature::feature_t f;
 			iss >> f;
 
 			fv.push_back(f);
-		}
+		} while (iss);
+
+		fv.pop_back();
 
 		featureMap[ch] = fv;
 	}
@@ -72,10 +79,10 @@ feature::FeatureVector characterToFeatureVector(const image::GrayscaleImage &img
 
 static int distanceBetweenChars(const segmentation::CharacterBox &lhs, const segmentation::CharacterBox &rhs)
 {
-	return lhs.topLeft.column - rhs.bottomRight.column;
+	return rhs.topLeft.column - lhs.bottomRight.column;
 }
 
-static int averageDistanceBetweenCharacters(const std::vector<segmentation::Line> &lines)
+static float averageDistanceBetweenCharacters(const std::vector<segmentation::Line> &lines)
 {
 	float sum = 0.f, count = 0.f;
 
@@ -83,12 +90,12 @@ static int averageDistanceBetweenCharacters(const std::vector<segmentation::Line
 	{
 		for (size_t i = 0; i < line.characters.size() - 1; ++i)
 		{
-			sum += distanceBetweenChars(line.characters[i + 1], line.characters[i]);
+			sum += distanceBetweenChars(line.characters[i], line.characters[i + 1]);
 			++count;
 		}
 	}
 
-	return (int)(sum / count);
+	return sum / count;
 }
 
 static distance_t distanceBetweenFeatureVectors(const feature::FeatureVector &lhs, const feature::FeatureVector &rhs)
@@ -124,24 +131,24 @@ static std::pair<char, distance_t> tryRecognize(const image::GrayscaleImage &img
 std::string recognizeText(const image::GrayscaleImage &img, const std::vector<segmentation::Line> &lines, const feature::FeatureMap &featureMap, const distance_t recognitionThreshold)
 {
 	std::stringstream text;
-
-	int averageDistance = averageDistanceBetweenCharacters(lines);
+	
+	const float averageDistance = averageDistanceBetweenCharacters(lines) * SPACE_DISTORTION_FACTOR;
 
 	for (const auto &line : lines)
 	{
 		for (size_t i = 0; i < line.characters.size(); ++i)
 		{
+			const auto [recognizedCharacter, distance] = tryRecognize(img, line, line.characters[i], featureMap);
+
+			text << (distance < recognitionThreshold ? recognizedCharacter : '?');
+
 			if (i < line.characters.size() - 1)
 			{
-				if (const int d = distanceBetweenChars(line.characters[i], line.characters[i + 1]); d > averageDistance)
+				if (const int d = distanceBetweenChars(line.characters[i], line.characters[i + 1]);  d > averageDistance)
 				{
 					text << ' ';
 				}
 			}
-
-			const auto [recognizedCharacter, similarity] = tryRecognize(img, line, line.characters[i], featureMap);
-
-			text << (similarity > recognitionThreshold ? recognizedCharacter : '?');
 		}
 
 		text << std::endl;

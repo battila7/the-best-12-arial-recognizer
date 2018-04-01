@@ -80,22 +80,22 @@ static feature_t countMatches(const image::GrayscaleImage &target, const WalshIm
 static std::vector<WalshImage> computeWalshMatrix()
 {
 	std::vector<WalshImage> images = {
-		createBorderWalsh({ 0, 0, 0, 0, 0, 0, 0, 0 }, ROW),
-		createBorderWalsh({ 0, 1, 0, 1, 0, 1, 0, 1 }, ROW),
-		createBorderWalsh({ 0, 0, 1, 1, 0, 0, 1, 1 }, ROW),
-		createBorderWalsh({ 0, 1, 1, 0, 0, 1, 1, 0 }, ROW),
-		createBorderWalsh({ 0, 0, 0, 0, 1, 1, 1, 1 }, ROW),
-		createBorderWalsh({ 0, 1, 0, 1, 1, 0, 1, 0 }, ROW),
-		createBorderWalsh({ 0, 0, 1, 1, 1, 1, 0, 0 }, ROW),
-		createBorderWalsh({ 0, 1, 1, 0, 1, 0, 0, 1 }, ROW),
+		createBorderWalsh({ 1, 1, 1, 1, 1, 1, 1, 1 }, ROW),
+		createBorderWalsh({ 1, 0, 1, 0, 1, 0, 1, 0 }, ROW),
+		createBorderWalsh({ 1, 1, 0, 0, 1, 1, 0, 0 }, ROW),
+		createBorderWalsh({ 1, 0, 0, 1, 1, 0, 0, 1 }, ROW),
+		createBorderWalsh({ 1, 1, 1, 1, 0, 0, 0, 0 }, ROW),
+		createBorderWalsh({ 1, 0, 1, 0, 0, 1, 0, 1 }, ROW),
+		createBorderWalsh({ 1, 1, 0, 0, 0, 0, 1, 1 }, ROW),
+		createBorderWalsh({ 1, 0, 0, 1, 0, 1, 1, 0 }, ROW),
 
-		createBorderWalsh({ 0, 1, 0, 1, 0, 1, 0, 1 }, COLUMN),
-		createBorderWalsh({ 0, 0, 1, 1, 0, 0, 1, 1 }, COLUMN),
-		createBorderWalsh({ 0, 1, 1, 0, 0, 1, 1, 0 }, COLUMN),
-		createBorderWalsh({ 0, 0, 0, 0, 1, 1, 1, 1 }, COLUMN),
-		createBorderWalsh({ 0, 1, 0, 1, 1, 0, 1, 0 }, COLUMN),
-		createBorderWalsh({ 0, 0, 1, 1, 1, 1, 0, 0 }, COLUMN),
-		createBorderWalsh({ 0, 1, 1, 0, 1, 0, 0, 1 }, COLUMN),
+		createBorderWalsh({ 1, 0, 1, 0, 1, 0, 1, 0 }, COLUMN),
+		createBorderWalsh({ 1, 1, 0, 0, 1, 1, 0, 0 }, COLUMN),
+		createBorderWalsh({ 1, 0, 0, 1, 1, 0, 0, 1 }, COLUMN),
+		createBorderWalsh({ 1, 1, 1, 1, 0, 0, 0, 0 }, COLUMN),
+		createBorderWalsh({ 1, 0, 1, 0, 0, 1, 0, 1 }, COLUMN),
+		createBorderWalsh({ 1, 1, 0, 0, 0, 0, 1, 1 }, COLUMN),
+		createBorderWalsh({ 1, 0, 0, 1, 0, 1, 1, 0 }, COLUMN),
 	};
 
 	for (size_t row = 1; row < MATRIX_DIMENSION; ++row)
