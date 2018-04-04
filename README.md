@@ -96,7 +96,7 @@ TB12AR should work on *nix as well, as it's written in completely portable **C++
 
 ### Dependencies
 
-Except for [SFML](https://www.sfml-dev.org/), TB12AR depends only on header-only libraries, placed in the `include` directory.
+Except for [SFML](https://www.sfml-dev.org/) (which is pulled in as a NuGet package), TB12AR depends only on header-only libraries, placed in the `include` directory.
 
 These are the following:
   * [stb_image, stb_image_resize, stb_image_write](https://github.com/nothings/stb) - Image reading, resizing and writing.
