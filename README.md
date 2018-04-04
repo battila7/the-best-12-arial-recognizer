@@ -10,6 +10,16 @@ Sure, but this one's easier to understand, and by the way, it was a small-scale 
 
 After you've successfully compiled the project (more on that below), you'll get an executable that can be run in two modes.
 
+Although reading through this documentation is highly advised, you can simply issue the
+
+~~~~
+$ TheBest12ArialRecognizer --help
+~~~~
+
+command and figure out stuff for yourself.
+
+Keep in mind, that error handling (inexistant input files for example) is pretty rudimentary at the moment, as well as logging and console feedback. Improving these matters is planned.
+
 ### Learning
 
 In order to recognize characters, the program needs to learn how they look like beforehand. TB12AR uses a feature file for this purpose that maps a feature vector to each character.
@@ -26,16 +36,22 @@ The command accepts the following arguments:
 | `--min-area` | The minimum area a character should take up. | `0` |
 | `--max-area` | The maximum area a character should take up. | `20000` |
 
-An example learning input file is placed in the data folder ([data/learn-input.jpg](data/learn-input.jpg)). This contains each letter from the english alphabet (with the capital variants included), the digits 0-9 and some punctuation marks. The feature file produced by *learning* the contents of this input is placed in the same directory ([data/features.txt](data/features.txt)), so that you can skip the learning part if you prefer.
+An example learning input file is placed in the data folder ([data/learn/lotr.jpg](data/learn/lotr.jpg)). This contains each letter from the english alphabet (with the capital variants included), the digits 0-9 and some punctuation marks. The feature file produced by *learning* the contents of this input is located at [data/features/lotr.txt](data/features/lotr.txt), so that you can skip the learning part if you prefer.
 
-Of course, we're talking about supervised learning here. Individual characters are segmented from the original image and then displayed in a window for the trainer. The trainer then should input the character to the program. This makes the program connect the character and the feature vector of the segment.
+Of course, we're talking about supervised learning here. Individual characters are segmented from the original image and then displayed in a window for the trainer. The trainer then should input the character to the program. This makes the program connect the actual character and the feature vector of the segment.
 
 **Note**: To be honest, the name of the program is slightly misleading. It can recognize text written using any font in any size -  as long as it's trained for that specific size and font. 12 size Arial is just a comfortable default.
 
 #### Example Usage
 
-~~~~ bash
-$ TheBest12ArialRecognizer learn -i data/learn-input.jpg -f features.txt
+~~~~
+$ TheBest12ArialRecognizer learn -i data/learn/lotr.jpg -f features.txt
+~~~~
+
+Help:
+
+~~~~
+$ TheBest12ArialRecognizer learn --help
 ~~~~
 
 ### Recognizing
@@ -56,12 +72,18 @@ The command accepts the following arguments:
 | `--max-area` | The maximum area a character should take up. | `20000` |
 | `--output-characters` | Output the characters produced by the segmentation phase (writes to the current directory). | No - It's a flag. |
 
-An example input file is provided in the data directory ([data/lotr-input.jpg](data/lotr-input.jpg)), that can be used as a quick test. The output produced by TB12AR using this input and the feature file in the data directory is also provided and can be found at [data/output.txt](data/output.txt). As you can see, it performs quite well, issues mostly occur at positions where characters cannot be segmented.
+An example input file is provided in the data directory ([data/recognize/lotr.jpg](data/recognize/lotr.jpg)), that can be used as a quick test. The output produced by TB12AR using this input and the feature file in the data directory is also provided and can be found at [data/output/lotr.txt](data/output/lotr.txt). As you can see, it performs quite well, issues mostly occur at positions where characters cannot be segmented.
 
 #### Example Usage
 
 ~~~~
-$ TheBest12ArialRecognizer recognize -i data/lotr-input.jpg -f data/features.txt -o output.txt
+$ TheBest12ArialRecognizer recognize -i data/recognize/lotr.jpg -f data/features/lotr.txt -o output.txt
+~~~~
+
+Help:
+
+~~~~
+$ TheBest12ArialRecognizer recognize --help
 ~~~~
 
 ## Building TB12AR
@@ -70,7 +92,7 @@ $ TheBest12ArialRecognizer recognize -i data/lotr-input.jpg -f data/features.txt
 
 In this repository, a Visual Studio solution is provided, therefore compiling it on Windows should be smooth sailing.
 
-TB12AR should work on Linux as well, as it's written in completely portable **C++17**. However, I haven't tested it. I guess, the only thing that needs some setup is [SFML](https://www.sfml-dev.org/).
+TB12AR should work on *nix as well, as it's written in completely portable **C++17**. However, I haven't tested it. I guess, the only thing that needs some setup is [SFML](https://www.sfml-dev.org/).
 
 ### Dependencies
 
