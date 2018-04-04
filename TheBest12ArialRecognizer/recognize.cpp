@@ -4,7 +4,7 @@
 #include "recognition.h"
 #include "segmentation.h"
 
-#include "subcommand/recognize.h"
+#include "command/recognize.h"
 
 namespace arialrec
 {

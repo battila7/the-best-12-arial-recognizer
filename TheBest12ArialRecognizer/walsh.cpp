@@ -34,6 +34,8 @@ static WalshImage createBorderWalsh(std::array<char, 8> values, FillDirection di
 
 	for (size_t i = 0; i < IMAGE_DIMENSION; ++i)
 	{
+		// Divided by 8 because although Walsh images have size of 64x64 pixels, they're
+		// actually 8x8 grids of 8x8 squares.
 		if (!values[i / 8])
 		{
 			continue;
@@ -79,6 +81,9 @@ static feature_t countMatches(const image::GrayscaleImage &target, const WalshIm
 
 static std::vector<WalshImage> computeWalshMatrix()
 {
+	// The images in first row and the first column are hardcoded.
+	// Other matrix elements are calculated from the hardcoded values
+	// by XOR-ing them together.
 	std::vector<WalshImage> images = {
 		createBorderWalsh({ 1, 1, 1, 1, 1, 1, 1, 1 }, ROW),
 		createBorderWalsh({ 1, 0, 1, 0, 1, 0, 1, 0 }, ROW),
@@ -98,11 +103,13 @@ static std::vector<WalshImage> computeWalshMatrix()
 		createBorderWalsh({ 1, 0, 0, 1, 0, 1, 1, 0 }, COLUMN),
 	};
 
+
 	for (size_t row = 1; row < MATRIX_DIMENSION; ++row)
 	{
 		for (size_t column = 1; column < MATRIX_DIMENSION; ++column)
 		{
 			const size_t rowImageIndex = row - 1;
+			// 7 is the base offset because the indices 0-7 are used for the first row.
 			const size_t columnImageIndex = 7 + column;
 
 			images.push_back(xor(images[row - 1], images[columnImageIndex]));
@@ -114,6 +121,8 @@ static std::vector<WalshImage> computeWalshMatrix()
 
 FeatureVector computeWalshValues(const image::GrayscaleImage &img, const segmentation::CharacterBox &charBox)
 {
+	// The Walsh matrix is calculated only once, on the first function call.
+	// It is an 8x8 matrix of 64x64 binary images.
 	static std::vector<WalshImage> matrix = computeWalshMatrix();
 
 	FeatureVector result;
@@ -121,6 +130,8 @@ FeatureVector computeWalshValues(const image::GrayscaleImage &img, const segment
 	auto charImg = image::copyRect(img, charBox.topLeft, charBox.bottomRight);
 	auto resizedCharImg = image::resize(charImg, IMAGE_DIMENSION, IMAGE_DIMENSION);
 
+	// We AND the Walsh image and the character image and count the matches.
+	// A pixel is considered a match if it is black on both the Walsh and the character image.
 	std::transform(matrix.begin(), matrix.end(), std::back_inserter(result), [&resizedCharImg](const WalshImage &probe)
 	{
 		return countMatches(resizedCharImg, probe);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include "subcommand/learn.h"
-#include "subcommand/recognize.h"
+#include "command/learn.h"
+#include "command/recognize.h"
 
 int main(int argc, char **argv)
 {

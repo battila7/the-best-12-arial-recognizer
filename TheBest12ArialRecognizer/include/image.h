@@ -66,6 +66,9 @@ Image<C> copyRect(const Image<C> &source, const LogicalPosition &topLeft, const 
 
 RGBImage expandToThreeComponents(const GrayscaleImage &img);
 
+/*
+* RGBA images and this function exist solely because of the requirements of SFML (it uses RGBA images).
+*/
 RGBAImage addAlphaChannel(const RGBImage &img);
 
 GrayscaleImage tightenToSingleComponent(const RGBImage &img);

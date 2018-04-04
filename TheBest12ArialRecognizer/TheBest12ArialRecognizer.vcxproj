@@ -148,10 +148,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="learn.cpp" />
     <ClCompile Include="size.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="include\feature\position.cpp" />
-    <ClCompile Include="include\subcommand\learn.cpp" />
     <ClCompile Include="preprocessing.cpp" />
     <ClCompile Include="recognition.cpp" />
     <ClCompile Include="recognize.cpp" />
@@ -162,6 +162,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\args\args.hpp" />
+    <ClInclude Include="include\command\learn.h" />
+    <ClInclude Include="include\command\recognize.h" />
     <ClInclude Include="include\feature\size.h" />
     <ClInclude Include="include\feature\position.h" />
     <ClInclude Include="include\feature\types.h" />
@@ -174,8 +176,6 @@
     <ClInclude Include="include\stbi\stb_image_resize.h" />
     <ClInclude Include="include\stbi\stb_image_write.h" />
     <ClInclude Include="include\stdafx.h" />
-    <ClInclude Include="include\subcommand\learn.h" />
-    <ClInclude Include="include\subcommand\recognize.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

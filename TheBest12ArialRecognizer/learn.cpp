@@ -5,7 +5,7 @@
 #include "segmentation.h"
 #include "feature/walsh.h"
 
-#include "subcommand/learn.h"
+#include "command/learn.h"
 
 namespace arialrec
 {
@@ -15,6 +15,8 @@ namespace command
 
 static constexpr int WINDOW_WIDTH = 200;
 static constexpr int WINDOW_HEIGHT = 200;
+
+static constexpr auto PROMPT = ">> ";
 
 struct DefaultArguments
 {
@@ -73,10 +75,10 @@ static feature::FeatureMap supervisedLearning(const image::RGBImage &rgbImage, c
 
 			std::string input;
 
-			std::cout << ">> ";
+			std::cout << PROMPT;
 			std::getline(std::cin, input);
 
-			if (input.size() == 0)
+			if (input.empty())
 			{
 				goto endOfLearning;
 			}
@@ -84,6 +86,11 @@ static feature::FeatureMap supervisedLearning(const image::RGBImage &rgbImage, c
 			{
 				featureMap[input[0]] = recognition::characterToFeatureVector(grayscaleImage, line, ch);
 			}
+
+			// Behave well, and check the event queue, so that the OS
+			// won't think the window is unresponsive.
+			sf::Event evt;
+			window.pollEvent(evt);
 		}
 	}
 

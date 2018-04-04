@@ -14,6 +14,7 @@ namespace recognition
 {
 
 static constexpr float SPACE_DISTORTION_FACTOR = 1.2f;
+static constexpr char UNKNOWN_CHARACTER = '?';
 
 feature::FeatureMap readFeatureMap(const char *path)
 {
@@ -115,7 +116,7 @@ static distance_t distanceBetweenFeatureVectors(const feature::FeatureVector &lh
 static std::pair<char, distance_t> tryRecognize(const image::GrayscaleImage &img, const segmentation::Line &line, const segmentation::CharacterBox charBox, const feature::FeatureMap &featureMap)
 {
 	const feature::FeatureVector charFeatures = characterToFeatureVector(img, line, charBox);
-	char result = '?';
+	char result = UNKNOWN_CHARACTER;
 	distance_t minDistance = std::numeric_limits<distance_t>::max();
 
 	for (auto it = featureMap.begin(); it != featureMap.end(); ++it)
@@ -134,6 +135,8 @@ std::string recognizeText(const image::GrayscaleImage &img, const std::vector<se
 {
 	std::stringstream text;
 	
+	// Used to determine whether a space should be inserted between two character or not.
+	// However, using simply the average was insufficient. A slightly larger value is used.
 	const float averageDistance = averageDistanceBetweenCharacters(lines) * SPACE_DISTORTION_FACTOR;
 
 	for (const auto &line : lines)
@@ -142,7 +145,7 @@ std::string recognizeText(const image::GrayscaleImage &img, const std::vector<se
 		{
 			const auto [recognizedCharacter, distance] = tryRecognize(img, line, line.characters[i], featureMap);
 
-			text << (distance < conf.recognitionThreshold ? recognizedCharacter : '?');
+			text << (distance < conf.recognitionThreshold ? recognizedCharacter : UNKNOWN_CHARACTER);
 
 			if (i < line.characters.size() - 1)
 			{
